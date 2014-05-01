@@ -43,7 +43,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -79,7 +78,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private long mListDisplayDate = new Date().getTime();
     private int mNewEntriesNumber;
 
-    private Button mRefreshListBtn;
 
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
@@ -225,20 +223,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView.setFastScrollEnabled(true);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
-        mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
-        mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mNewEntriesNumber = 0;
-                mListDisplayDate = new Date().getTime();
-
-                refreshUI();
-                if (mUri != null) {
-                    getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                    getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
-                }
-            }
-        });
 
         mSearchView = (SearchView) rootView.findViewById(R.id.searchView);
         if (savedInstanceState != null) {
@@ -432,10 +416,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
 
         if (mNewEntriesNumber > 0) {
-            mRefreshListBtn.setText(getResources().getQuantityString(R.plurals.number_of_new_entries, mNewEntriesNumber, mNewEntriesNumber));
-            mRefreshListBtn.setVisibility(View.VISIBLE);
-        } else {
-            mRefreshListBtn.setVisibility(View.GONE);
+                mNewEntriesNumber = 0;
+                mListDisplayDate = new Date().getTime();
+                refreshUI();
+                if (mUri != null) {
+                    getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                    getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
+                }            
         }
     }
 
