@@ -62,9 +62,12 @@ import android.widget.Toast;
 
 import com.technoxist.Constants;
 import com.technoxist.R;
+import com.technoxist.utils.FileUtils;
 import com.technoxist.utils.HtmlUtils;
 import com.technoxist.utils.PrefUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 public class EntryView extends WebView {
@@ -243,12 +246,23 @@ public class EntryView extends WebView {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Context context = getContext();
                 try {
-                    // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    context.startActivity(intent);
+                	if (url.startsWith(Constants.FILE_SCHEME)) {
+                        File file = new File(url.replace(Constants.FILE_SCHEME, ""));
+                        File extTmpFile = new File(context.getExternalCacheDir(), "tmp_img.jpg");
+                        FileUtils.copy(file, extTmpFile);
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(extTmpFile), "image/jpeg");
+                        context.startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        context.startActivity(intent);
+                    }
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(context, R.string.cant_open_link, Toast.LENGTH_SHORT).show();
                 }
+                catch (IOException e) {
+                    e.printStackTrace();
+                	                  }
                 return true;
             }
         });
