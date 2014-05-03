@@ -99,7 +99,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
-
+        
+        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
+            getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
+        } else {
+            getWindow().setBackgroundDrawableResource(R.color.dark_entry_list_background);
+        }
         setContentView(R.layout.activity_home);
 
         mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.entries_list_fragment);
@@ -125,8 +130,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+        int drawerIcon = R.drawable.ic_drawer_light;
+        if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
+        	drawerIcon = R.drawable.ic_drawer_dark;
+        }
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, drawerIcon, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerStateChanged(int newState) {
                 if (mIsDrawerMoving && newState == DrawerLayout.STATE_IDLE) {
@@ -226,7 +234,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         boolean isOpened = mDrawerLayout.isDrawerOpen(mDrawerList);
         if (isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
             
-            getActionBar().setIcon(R.drawable.icon);
+            getActionBar().setIcon(R.drawable.drawer_icon);
 
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);

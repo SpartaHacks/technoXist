@@ -27,12 +27,13 @@ import android.graphics.BitmapFactory;
 import android.util.TypedValue;
 
 import com.technoxist.MainApplication;
+import com.technoxist.R;
 
 public class UiUtils {
 
     static public void setPreferenceTheme(Activity a) {
         if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
-            a.setTheme(android.R.style.Theme_Holo);
+            a.setTheme(R.style.Theme_Dark);
         }
     }
 

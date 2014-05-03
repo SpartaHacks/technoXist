@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.technoxist.R;
+import com.technoxist.utils.PrefUtils;
 import com.technoxist.utils.UiUtils;
 
 public class AboutActivity extends BaseActivity {
@@ -17,6 +18,11 @@ public class AboutActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
+        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
+            getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
+        } else {
+            getWindow().setBackgroundDrawableResource(R.color.prefs_background);
+        }
         setContentView(R.layout.activity_about);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 

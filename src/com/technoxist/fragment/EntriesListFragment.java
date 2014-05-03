@@ -220,7 +220,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
 
         mListView = (ListView) rootView.findViewById(android.R.id.list);
-        mListView.setFastScrollEnabled(true);
+        mListView.setFastScrollEnabled(false);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
 

@@ -63,7 +63,11 @@ public class GeneralPrefsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
-
+        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
+            getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
+        } else {
+            getWindow().setBackgroundDrawableResource(R.color.prefs_background);
+        }
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.layout.activity_preferences);

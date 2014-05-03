@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<color name="light_entry_list_background">#e5e5e5</color>
+<color name="dark_entry_list_background">#000000</color>
+<color name="actionbar_blue">#ff33b5e5</color>
+<color name="menu_background">#ff333333</color>
+<color name="prefs_background">#ff202020</color>
+</resources>
