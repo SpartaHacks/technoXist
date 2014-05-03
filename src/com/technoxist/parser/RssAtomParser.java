@@ -596,6 +596,11 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     @Override
+    public void fatalError(SAXParseException e) throws SAXException {
+        // ignore errors
+         }
+    
+    @Override
     public void endDocument() throws SAXException {
         ContentResolver cr = MainApplication.getContext().getContentResolver();
 
