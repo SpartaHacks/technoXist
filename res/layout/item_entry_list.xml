@@ -6,7 +6,10 @@
     <ImageView
         android:id="@android:id/icon"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
 

@@ -43,8 +43,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -145,9 +143,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     };
 
     private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
-        static final int SWIPE_MIN_DISTANCE = 120;
-        static final int SWIPE_MAX_OFF_PATH = 150;
-        static final int SWIPE_THRESHOLD_VELOCITY = 150;
+
 
         private final GestureDetector mGestureDetector;
 
@@ -155,37 +151,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mGestureDetector = new GestureDetector(context, this);
         }
 
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (mListView != null && e1 != null && e2 != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
-                int position = mListView.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
-                View view = mListView.getChildAt(position - mListView.getFirstVisiblePosition());
-
-                if (view != null) {
-                    // Just click on views, the adapter will do the real stuff
-                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                        CheckBox cb = (CheckBox) view.findViewById(android.R.id.checkbox);
-                        cb.setChecked(!cb.isChecked());
-                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                        ImageView star = (ImageView) view.findViewById(android.R.id.icon);
-                        star.callOnClick();
-                    }
-
-                    // Just simulate a CANCEL event to remove the item highlighting
-                    mListView.post(new Runnable() { // In a post to avoid a crash on 4.0.x
-                        @Override
-                        public void run() {
-                            MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                            mListView.dispatchTouchEvent(motionEvent);
-                            motionEvent.recycle();
-                        }
-                    });
-                    return true;
-                }
-            }
-
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
+        
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
