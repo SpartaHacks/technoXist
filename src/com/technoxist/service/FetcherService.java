@@ -55,7 +55,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -107,6 +106,8 @@ public class FetcherService extends IntentService {
 
     private static final int THREAD_NUMBER = 3;
     private static final int MAX_TASK_ATTEMPT = 3;
+
+    private long mListDisplayDate = new Date().getTime();
 
     private static final int FETCHMODE_DIRECT = 1;
     private static final int FETCHMODE_REENCODE = 2;
@@ -163,18 +164,25 @@ public class FetcherService extends IntentService {
 
             String feedId = intent.getStringExtra(Constants.FEED_ID);
             int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
-
+            int unreadCount;
             if (newCount > 0) {
                 if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
+                    Cursor cursor1 = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
+
+                    cursor1.moveToFirst();
+                    newCount = cursor1.getInt(0); // The number has possibly changed
+                    cursor1.close();
+                    
                     Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, EntryColumns.WHERE_UNREAD, null, null);
 
                     cursor.moveToFirst();
-                    newCount = cursor.getInt(0); // The number has possibly changed
+                    unreadCount = cursor.getInt(0); // The number has possibly changed
                     cursor.close();
+
 
                     if (newCount > 0) {
                         String text = getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount);
-
+                        String unreadText = getResources().getQuantityString(R.plurals.number_of_unread_entries, unreadCount, unreadCount);
                         Intent notificationIntent = new Intent(FetcherService.this, HomeActivity.class);
                         PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -182,8 +190,8 @@ public class FetcherService extends IntentService {
                         Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getContext()) //
                                 .setContentIntent(contentIntent) //
                                 .setSmallIcon(R.drawable.icon) //
-                                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon)) //
                                 .setTicker(text) //
+                                .setContentInfo(unreadText)
                                 .setWhen(System.currentTimeMillis()) //
                                 .setAutoCancel(true) //
                                 .setContentTitle(getString(R.string.app_name)) //

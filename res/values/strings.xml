@@ -180,8 +180,13 @@
     <string name="settings_proxy_type">Type</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
-        <item quantity="other">%d new entries</item>
+        <item quantity="one">One new Article</item>
+        <item quantity="other">%d new Articles</item>
+    </plurals>
+    
+    <plurals name="number_of_unread_entries">
+        <item quantity="one">1 unread</item>
+        <item quantity="other">%d unreads</item>
     </plurals>
 
     <string-array name="settings_intervals">
