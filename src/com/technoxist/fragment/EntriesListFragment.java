@@ -76,7 +76,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private ListView mListView;
     private SearchView mSearchView;
     private long mListDisplayDate = new Date().getTime();
-    private int mNewEntriesNumber;
+    private int mNewEntriesNumber, mOldUnreadEntriesNumber = -1;
+    private boolean mAutoRefreshDisplayDate = false;
 
 
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
@@ -114,11 +115,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
     };
 
-    private LoaderManager.LoaderCallbacks<Cursor> mNewEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+    private LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            String where = EntryColumns.FETCH_DATE + '>' + mListDisplayDate;
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{Constants.DB_COUNT}, where, null, null);
+        	CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
             cursorLoader.setUpdateThrottle(150);
             return cursorLoader;
         }
@@ -127,7 +127,16 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             data.moveToFirst();
             mNewEntriesNumber = data.getInt(0);
-            refreshUI();
+            mOldUnreadEntriesNumber = data.getInt(1);
+            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
+                mListDisplayDate = new Date().getTime();
+                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+            } else {
+                refreshUI();
+            }
+
+            mAutoRefreshDisplayDate = false;
         }
 
         @Override
@@ -195,19 +204,25 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
 
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
-            //getLoaderManager().initLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
         }
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
-        // I don't know why this is needed... The loader seems to not be notified when the article is mark as read
         if (mUri != null) {
+        	// If the list is empty when we are going back here, try with the last display date
+            if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
+                mListDisplayDate = new Date().getTime();
+            } else {
+                mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
+            }
+
             getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
         }
     }
 
@@ -249,17 +264,14 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             }
         });
 
-        if (mUri != null) {
-            getLoaderManager().initLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
-        }
 
         return rootView;
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
-        super.onPause();
+        super.onStop();
     }
 
     @Override
@@ -397,7 +409,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListDisplayDate = new Date().getTime();
         if (mUri != null) {
             getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
+            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
         }
         refreshUI();
     }
@@ -421,7 +433,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 refreshUI();
                 if (mUri != null) {
                     getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                    getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
+                    getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
                 }            
         }
     }
