@@ -82,7 +82,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public ImageView starImgView;
     }
 
-    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIconPos, mFeedNamePos;
+    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
 
     private final Uri mUri;
     private final boolean mShowFeedInfo;
@@ -147,8 +147,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         });
 
         if (mShowFeedInfo && mFeedIconPos > -1) {
-            byte[] iconBytes = cursor.getBlob(mFeedIconPos);
-            Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
+        	final long feedId = cursor.getLong(mFeedIdPos);
+            Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, cursor, mFeedIconPos);
+
+
             if (bitmap != null) {
                 holder.dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
             } else {
@@ -256,6 +258,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
             mIdPos = cursor.getColumnIndex(EntryColumns._ID);
             if (mShowFeedInfo) {
+            	mFeedIdPos = cursor.getColumnIndex(EntryColumns.FEED_ID);
                 mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
                 mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
             }

@@ -24,7 +24,6 @@ package com.technoxist.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -166,9 +165,10 @@ public class DrawerAdapter extends BaseAdapter {
                     holder.stateTxt.setText(new StringBuilder(mContext.getString(R.string.error)).append(COLON).append(mFeedsCursor.getString(POS_ERROR)));
                 }
 
-                byte[] iconBytes = mFeedsCursor.getBlob(POS_ICON);
-                if (iconBytes != null && iconBytes.length > 0) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+                final long feedId = mFeedsCursor.getLong(POS_ID);
+                Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
+
+                if (bitmap != null) {
                     holder.iconView.setImageBitmap(bitmap);
                 } else {
                     holder.iconView.setImageResource(R.drawable.icon);
