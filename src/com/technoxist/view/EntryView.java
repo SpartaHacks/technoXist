@@ -98,6 +98,7 @@ public class EntryView extends WebView {
             + "a {color: #0099CC}"
             + "h1 a {color: inherit; text-decoration: none}"
             + "img {height: auto} "
+            + "iframe {height: 250px}"
             + "pre {white-space: pre-wrap;} "
             + "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
             + "p {margin: 0.8em 0 0.8em 0; text-align: justify} "            + "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTBORDER_COLOR + "; border-bottom:1px " + SUBTBORDER_COLOR + "; padding-top:2px; padding-bottom:2px } "
