@@ -52,6 +52,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
@@ -66,6 +67,7 @@ import com.technoxist.R;
 import com.technoxist.provider.FeedData;
 import com.technoxist.provider.FeedData.EntryColumns;
 import com.technoxist.provider.FeedData.FeedColumns;
+import com.technoxist.utils.PrefUtils;
 import com.technoxist.utils.StringUtils;
 import com.technoxist.utils.UiUtils;
 
@@ -79,7 +81,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public ImageView starImgView;
     }
 
-    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
+    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos, TitleEnabled, DateEnabled;
+    private int Disabled = Color.parseColor("#8A8A8A");
 
     private final Uri mUri;
     private final boolean mShowFeedInfo;
@@ -166,13 +169,20 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
         }
 
+        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
+        TitleEnabled = Color.parseColor("#000000");
+        DateEnabled = Color.parseColor("#606060");
+        } else {
+        TitleEnabled = Color.parseColor("#FFFFFF");
+        DateEnabled = Color.parseColor("#BBBBBB");
+        }
         
         if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {
-            holder.titleTextView.setEnabled(true);
-            holder.dateTextView.setEnabled(true);
+            holder.titleTextView.setTextColor(TitleEnabled);
+            holder.dateTextView.setTextColor(DateEnabled);
         } else {
-            holder.titleTextView.setEnabled(false);
-            holder.dateTextView.setEnabled(false);
+            holder.titleTextView.setTextColor(Disabled);
+            holder.dateTextView.setTextColor(Disabled);
         }
     }
 
