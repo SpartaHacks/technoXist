@@ -55,6 +55,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -196,7 +197,7 @@ public class FetcherService extends IntentService {
                                 .setAutoCancel(true) //
                                 .setContentTitle(getString(R.string.app_name)) //
                                 .setContentText(text) //
-                                .setLights(0xffffffff, 300, 1000);
+                                .setLights(Color.BLUE, 300, 1000);
 
                         if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
                             notifBuilder.setVibrate(new long[]{0, 1000});
