@@ -32,11 +32,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.technoxist.MainApplication;
 import com.technoxist.R;
 import com.technoxist.provider.FeedData;
 import com.technoxist.provider.FeedData.EntryColumns;
-import com.technoxist.utils.StringUtils;
 import com.technoxist.utils.UiUtils;
 
 import java.util.LinkedHashMap;
@@ -50,15 +48,11 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_IS_GROUP = 3;
     private static final int POS_GROUP_ID = 4;
     private static final int POS_ICON = 5;
-    private static final int POS_LAST_UPDATE = 6;
-    private static final int POS_ERROR = 7;
     private static final int POS_UNREAD = 8;
 
     private static final int ITEM_PADDING = UiUtils.dpToPixel(20);
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
-
-    private static final String COLON = MainApplication.getContext().getString(R.string.colon);
 
     private static final int CACHE_MAX_ENTRIES = 100;
     private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
@@ -75,7 +69,6 @@ public class DrawerAdapter extends BaseAdapter {
     private static class ViewHolder {
         public ImageView iconView;
         public TextView titleTxt;
-        public TextView stateTxt;
         public TextView unreadTxt;
         public View separator;
     }
@@ -102,8 +95,7 @@ public class DrawerAdapter extends BaseAdapter {
 
             ViewHolder holder = new ViewHolder();
             holder.iconView = (ImageView) convertView.findViewById(R.id.icon);
-            holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
-            holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
+            holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1); 
             holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
             holder.separator = convertView.findViewById(R.id.separator);
             convertView.setTag(holder);
@@ -116,7 +108,6 @@ public class DrawerAdapter extends BaseAdapter {
         holder.titleTxt.setText("");
         holder.titleTxt.setTextColor(NORMAL_TEXT_COLOR);
         holder.titleTxt.setAllCaps(false);
-        holder.stateTxt.setVisibility(View.GONE);
         holder.unreadTxt.setText("");
         convertView.setPadding(0, 0, 0, 0);
         holder.separator.setVisibility(View.GONE);
@@ -140,31 +131,6 @@ public class DrawerAdapter extends BaseAdapter {
                 holder.titleTxt.setAllCaps(true);
                 holder.separator.setVisibility(View.VISIBLE);
             } else {
-                holder.stateTxt.setVisibility(View.VISIBLE);
-
-                if (mFeedsCursor.isNull(POS_ERROR)) {
-                    long timestamp = mFeedsCursor.getLong(POS_LAST_UPDATE);
-
-                    // Date formatting is expensive, look at the cache
-                    String formattedDate = mFormattedDateCache.get(timestamp);
-                    if (formattedDate == null) {
-
-                        formattedDate = mContext.getString(R.string.update) + COLON;
-
-                        if (timestamp == 0) {
-                            formattedDate += mContext.getString(R.string.never);
-                        } else {
-                            formattedDate += StringUtils.getDateTimeString(timestamp);
-                        }
-
-                        mFormattedDateCache.put(timestamp, formattedDate);
-                    }
-
-                    holder.stateTxt.setText(formattedDate);
-                } else {
-                    holder.stateTxt.setText(new StringBuilder(mContext.getString(R.string.error)).append(COLON).append(mFeedsCursor.getString(POS_ERROR)));
-                }
-
                 final long feedId = mFeedsCursor.getLong(POS_ID);
                 Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
 
