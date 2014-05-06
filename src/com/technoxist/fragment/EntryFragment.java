@@ -298,7 +298,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
         if (mFavorite) {
             MenuItem item = menu.findItem(R.id.menu_star);
-            item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
+            item.setIcon(R.drawable.rating_important);
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -314,7 +314,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     mFavorite = !mFavorite;
 
                     if (mFavorite) {
-                        item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
+                        item.setIcon(R.drawable.rating_important);
                     } else {
                         item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
                     }

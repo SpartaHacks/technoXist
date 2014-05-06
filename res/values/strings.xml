@@ -23,9 +23,6 @@
 
     <!-- GENERAL -->
     <string name="about_technoxist">About technoXist</string>
-    <string name="never">never</string>
-    <string name="update">Update</string>
-    <string name="colon">:\u00A0</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_all_read">Mark all as read</string>
@@ -96,19 +93,17 @@
     <string name="to_group_into">Into the group</string>
 
     <!-- ENTRIES -->
-    <string name="all">Entries</string>
-    <string name="no_entries">No entries</string>
-    <string name="favorites">Starred</string>
+    <string name="all">ALL</string>
+    <string name="favorites">Favorites</string>
     <string name="context_menu_hide_read">Hide read entries</string>
     <string name="context_menu_show_read">Show read entries</string>
-    <string name="context_menu_share_starred">Share starred entries</string>
-    <string name="menu_star">Star</string>
-    <string name="menu_unstar">Unstar</string>
+    <string name="context_menu_share_starred">Share favorite articles</string>
+    <string name="menu_star">Favorite</string>
     <string name="menu_share">Share</string>
     <string name="menu_full_screen">Full screen</string>
     <string name="menu_copy_clipboard">Copy link</string>
     <string name="menu_mark_as_unread">Mark as unread</string>
-    <string name="share_favorites_title">technoxist: starred entries</string>
+    <string name="share_favorites_title">technoxist: favorite entries</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Retrieve the full text</string>
     <string name="original_text">Show original text</string>
@@ -147,29 +142,29 @@
     <string name="settings_category_content_presentation">Content presentation</string>
     <string name="settings_light_theme">Light theme</string>
     <string name="settings_light_theme_description">Use the light theme</string>
-    <string name="settings_keep_time">Time that the entries will be kept</string>
+    <string name="settings_keep_time">Time that the articles will be kept</string>
     <string name="settings_display_images">Display images</string>
-    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_display_images_description">Display images in articles</string>
     <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Text size</string>
-    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first">Article order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
 	<string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
-    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>   
-    <string name="settings_refresh_on_open">Refresh feeds on open</string>
-    <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the
+    <string name="settings_display_entries_fullscreen_description">Automatically display articles in fullscreen</string>   
+    <string name="settings_refresh_on_open">Refresh articles on open</string>
+    <string name="settings_refresh_on_open_description">Refreshes all articles after opening the
         application
     </string>
     <string name="settings_refresh_wifi_only">Refresh only with Wifi</string>
     <string name="settings_refresh_wifi_only_description">Automatic refresh will be done if when the
         wifi is enabled
     </string>
-    <string name="settings_visible_feeds">Visible feeds</string>
+    <string name="settings_visible_feeds">Visible category</string>
     <string name="settings_widget_background">Background</string>
     <string name="settings_widget_background_description">Color and transparency of the widget
         background
     </string>
-    <string name="all_feeds">All feeds (incl. future)</string>
+    <string name="all_feeds">All Categories</string>
     <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_network">Network</string>
     <string name="settings_proxy_enabled">Enabled</string>
