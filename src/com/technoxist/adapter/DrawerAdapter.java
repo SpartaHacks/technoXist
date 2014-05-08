@@ -64,7 +64,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     private final Context mContext;
     private Cursor mFeedsCursor;
-    private int mAllUnreadNumber, mFavoritesNumber;
+    private int mAllUnreadNumber, mFavoritesNumber, N;
 
     private static class ViewHolder {
         public ImageView iconView;
@@ -111,19 +111,16 @@ public class DrawerAdapter extends BaseAdapter {
         holder.unreadTxt.setText("");
         convertView.setPadding(0, 0, 0, 0);
         holder.separator.setVisibility(View.GONE);
+        N = mFeedsCursor.getCount();
+        if (position == 0) {
+            holder.titleTxt.setText(R.string.all);
+            holder.iconView.setImageResource(R.drawable.all);
 
-        if (position == 0 || position == 1) {
-            holder.titleTxt.setText(position == 0 ? R.string.all : R.string.favorites);
-            holder.iconView.setImageResource(position == 0 ? R.drawable.ic_statusbar_rss : R.drawable.dimmed_rating_important);
-
-            int unread = position == 0 ? mAllUnreadNumber : mFavoritesNumber;
+            int unread = mAllUnreadNumber;
             if (unread != 0) {
                 holder.unreadTxt.setText(String.valueOf(unread));
             }
-        } else if (position == 2) {
-            holder.titleTxt.setText(android.R.string.search_go);
-            holder.iconView.setImageResource(R.drawable.action_search);
-        } else if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        }else if (position >= 0 && position <= N && mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 1)) {
             holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
             if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
@@ -133,11 +130,22 @@ public class DrawerAdapter extends BaseAdapter {
             } else {
                 final long feedId = mFeedsCursor.getLong(POS_ID);
                 Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
-
-                if (bitmap != null) {
-                    holder.iconView.setImageBitmap(bitmap);
-                } else {
-                    holder.iconView.setImageResource(R.drawable.icon);
+                String FeedName = mFeedsCursor.getString(POS_NAME);
+                if (FeedName.equals("NEWS")){
+                	holder.iconView.setImageResource(R.drawable.news);
+                }
+                else if (FeedName.equals("HELP")) {
+                	holder.iconView.setImageResource(R.drawable.help);
+                }
+                else if (FeedName.equals("REVIEWS")) {
+                	holder.iconView.setImageResource(R.drawable.review);
+                }
+                else{
+                	if (bitmap != null) {
+                        holder.iconView.setImageBitmap(bitmap);
+                    } else {
+                	holder.iconView.setImageResource(R.drawable.icon);
+                    }
                 }
 
                 int unread = mFeedsCursor.getInt(POS_UNREAD);
@@ -149,9 +157,17 @@ public class DrawerAdapter extends BaseAdapter {
             if (!mFeedsCursor.isNull(POS_GROUP_ID)) { // First level
                 convertView.setPadding(ITEM_PADDING, 0, 0, 0);
             }
-        }
-
-        return convertView;
+        }else if (position == N+1 && mFeedsCursor.moveToPosition(position - N+1)){
+	    holder.titleTxt.setText(R.string.favorites);
+            holder.iconView.setImageResource(R.drawable.dimmed_rating_important);
+            int unread = mFavoritesNumber;
+            if (unread != 0) {
+            holder.unreadTxt.setText(String.valueOf(unread));
+            }
+	} else if (position == N+2) {
+            holder.titleTxt.setText(android.R.string.search_go);
+            holder.iconView.setImageResource(R.drawable.action_search);
+    }return convertView;
     }
 
     @Override
@@ -169,7 +185,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 1)) {
             return mFeedsCursor.getLong(POS_ID);
         }
 
@@ -177,7 +193,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public byte[] getItemIcon(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 1)) {
             return mFeedsCursor.getBlob(POS_ICON);
         }
 
@@ -185,7 +201,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public String getItemName(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 1)) {
             return mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME);
         }
 
@@ -193,7 +209,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public boolean isItemAGroup(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 1)) {
             return mFeedsCursor.getInt(POS_IS_GROUP) == 1;
         }
 

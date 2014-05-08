@@ -89,7 +89,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private CharSequence mTitle;
     private BitmapDrawable mIcon;
-    private int mCurrentDrawerPos;
+    private int mCurrentDrawerPos, N;
 
     private boolean mIsDrawerMoving = false;
 
@@ -170,26 +170,26 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     private void refreshTitleAndIcon() {
+    	Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, FeedColumns._ID, null, null);
+    	cursor.moveToFirst();
+    	N = cursor.getInt(0);
+    	cursor.close();
         getActionBar().setTitle(mTitle);
-        switch (mCurrentDrawerPos) {
-            case 0:
-                getActionBar().setTitle(R.string.all);
+        if (mCurrentDrawerPos == 0) {
+            getActionBar().setTitle(R.string.all);
+        }
+        else if (mCurrentDrawerPos == N+1) {
+            getActionBar().setTitle(R.string.favorites);
+        }
+        else if (mCurrentDrawerPos == N+2) {
+            getActionBar().setTitle(android.R.string.search_go);
+        }
+
+        else {
+            getActionBar().setTitle(mTitle);
+            if (mIcon != null) {
                 
-                break;
-            case 1:
-                getActionBar().setTitle(R.string.favorites);
-                
-                break;
-            case 2:
-                getActionBar().setTitle(android.R.string.search_go);
-                
-                break;
-            default:
-                getActionBar().setTitle(mTitle);
-                if (mIcon != null) {
-                    
-                }
-                break;
+            }
         }
     }
 
@@ -338,33 +338,32 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         Uri newUri;
         boolean showFeedInfo = true;
 
-        switch (position) {
-            case 0:
-                newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
-                break;
-            case 1:
-                newUri = EntryColumns.FAVORITES_CONTENT_URI;
-                break;
-            case 2:
-                newUri = EntryColumns.SEARCH_URI(mEntriesFragment.getCurrentSearch());
-                break;
-            default:
-                long feedOrGroupId = mDrawerAdapter.getItemId(position);
-                if (mDrawerAdapter.isItemAGroup(position)) {
-                    newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
-                } else {
-                    byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
-                    Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
-                    if (bitmap != null) {
-                        mIcon = new BitmapDrawable(getResources(), bitmap);
-                    }
-
-                    newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
-                    showFeedInfo = false;
-                }
-                mTitle = mDrawerAdapter.getItemName(position);
-                break;
+        if (position == 0) {
+            newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
         }
+        
+        else if (position == N+1) {
+            newUri = EntryColumns.FAVORITES_CONTENT_URI;
+        }
+        else if (position == N+2) {
+            newUri = EntryColumns.SEARCH_URI(mEntriesFragment.getCurrentSearch());
+        }      
+        else {
+            long feedOrGroupId = mDrawerAdapter.getItemId(position);
+            if (mDrawerAdapter.isItemAGroup(position)) {
+                newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
+            } else {
+                byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
+                Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
+                if (bitmap != null) {
+                    mIcon = new BitmapDrawable(getResources(), bitmap);
+                }
+
+                newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
+                showFeedInfo = false;
+            }
+            mTitle = mDrawerAdapter.getItemName(position);
+        	}
 
         if (!newUri.equals(mEntriesFragment.getUri())) {
             mEntriesFragment.setData(newUri, showFeedInfo);
