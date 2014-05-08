@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <opml version="1.1">
 <body>
-		<outline title="NEWS" type="rss" xmlUrl="http://technoxist.com/category/all/news/feed/" retrieveFullText='true'/>
-		<outline title="REVIEWS" type="rss" xmlUrl="http://technoxist.com/category/all/rev/feed/" retrieveFullText='true'/>
-		<outline title="HELP" type="rss" xmlUrl="http://technoxist.com/category/all/how-to/feed/" retrieveFullText='true'/>
+		<outline title="News" type="rss" xmlUrl="http://technoxist.com/category/all/news/feed/" retrieveFullText='true'/>
+		<outline title="Reviews" type="rss" xmlUrl="http://technoxist.com/category/all/rev/feed/" retrieveFullText='true'/>
+		<outline title="Help" type="rss" xmlUrl="http://technoxist.com/category/all/how-to/feed/" retrieveFullText='true'/>
 </body>
 </opml>

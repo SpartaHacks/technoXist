@@ -131,13 +131,13 @@ public class DrawerAdapter extends BaseAdapter {
                 final long feedId = mFeedsCursor.getLong(POS_ID);
                 Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
                 String FeedName = mFeedsCursor.getString(POS_NAME);
-                if (FeedName.equals("NEWS")){
+                if (FeedName.equals("News")){
                 	holder.iconView.setImageResource(R.drawable.news);
                 }
-                else if (FeedName.equals("HELP")) {
+                else if (FeedName.equals("Help")) {
                 	holder.iconView.setImageResource(R.drawable.help);
                 }
-                else if (FeedName.equals("REVIEWS")) {
+                else if (FeedName.equals("Reviews")) {
                 	holder.iconView.setImageResource(R.drawable.review);
                 }
                 else{
