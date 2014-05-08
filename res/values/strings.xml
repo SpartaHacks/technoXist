@@ -178,11 +178,7 @@
         <item quantity="one">One new Article</item>
         <item quantity="other">%d new Articles</item>
     </plurals>
-    
-    <plurals name="number_of_unread_entries">
-        <item quantity="one">1 unread</item>
-        <item quantity="other">%d unreads</item>
-    </plurals>
+    <string name="number_of_unread_entries">unread</string>
 
     <string-array name="settings_intervals">
         <item>1 minute</item>

@@ -165,7 +165,6 @@ public class FetcherService extends IntentService {
 
             String feedId = intent.getStringExtra(Constants.FEED_ID);
             int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
-            int unreadCount;
             if (newCount > 0) {
                 if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
                     Cursor cursor1 = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
@@ -177,13 +176,13 @@ public class FetcherService extends IntentService {
                     Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, EntryColumns.WHERE_UNREAD, null, null);
 
                     cursor.moveToFirst();
-                    unreadCount = cursor.getInt(0); // The number has possibly changed
+                    String unreadCount = String.valueOf(cursor.getInt(0)); // The number has possibly changed
                     cursor.close();
 
 
                     if (newCount > 0) {
                         String text = getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount);
-                        String unreadText = getResources().getQuantityString(R.plurals.number_of_unread_entries, unreadCount, unreadCount);
+                        String unreadText = unreadCount + " " + getString(R.string.number_of_unread_entries);
                         Intent notificationIntent = new Intent(FetcherService.this, HomeActivity.class);
                         PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
