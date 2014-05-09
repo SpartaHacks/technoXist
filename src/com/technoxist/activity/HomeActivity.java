@@ -49,7 +49,6 @@ import com.technoxist.MainApplication;
 import com.technoxist.R;
 import com.technoxist.adapter.DrawerAdapter;
 import com.technoxist.fragment.EntriesListFragment;
-import com.technoxist.provider.FeedData;
 import com.technoxist.provider.FeedData.EntryColumns;
 import com.technoxist.provider.FeedData.FeedColumns;
 import com.technoxist.service.FetcherService;
