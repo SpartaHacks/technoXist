@@ -269,12 +269,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_refresh).setVisible(false);
             menu.findItem(R.id.menu_edit).setVisible(false);
-            menu.findItem(R.id.menu_settings_main).setVisible(false);
         } else if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_share_starred).setVisible(false);
             menu.findItem(R.id.menu_edit).setVisible(false);
-            menu.findItem(R.id.menu_settings_main).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
 

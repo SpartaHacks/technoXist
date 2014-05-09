@@ -184,7 +184,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         else if (mCurrentDrawerPos == N+2) {
             getActionBar().setTitle(android.R.string.search_go);
         }
-
+        else if (mCurrentDrawerPos == N+3) {
+            getActionBar().setTitle(R.string.all);
+        }
         else {
             getActionBar().setTitle(mTitle);
             if (mIcon != null) {
@@ -276,9 +278,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     MainApplication.getContext().startService(new Intent(MainApplication.getContext(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
                 }
                 return true;
-            case R.id.menu_settings_main:
-                startActivity(new Intent(this, GeneralPrefsActivity.class));
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -347,7 +346,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
         else if (position == N+2) {
             newUri = EntryColumns.SEARCH_URI(mEntriesFragment.getCurrentSearch());
-        }      
+        }
+        else if (position == N+3) {
+        	startActivity(new Intent(this, GeneralPrefsActivity.class));
+           	newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
+           	position = 0;
+        	}
         else {
             long feedOrGroupId = mDrawerAdapter.getItemId(position);
             if (mDrawerAdapter.isItemAGroup(position)) {

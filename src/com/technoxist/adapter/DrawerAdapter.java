@@ -167,13 +167,16 @@ public class DrawerAdapter extends BaseAdapter {
 	} else if (position == N+2) {
             holder.titleTxt.setText(android.R.string.search_go);
             holder.iconView.setImageResource(R.drawable.action_search);
+    } else if (position == N+3) {
+        holder.titleTxt.setText(R.string.menu_settings);
+        holder.iconView.setImageResource(R.drawable.settings);
     }return convertView;
     }
 
     @Override
     public int getCount() {
         if (mFeedsCursor != null) {
-            return mFeedsCursor.getCount() + 3;
+            return mFeedsCursor.getCount() + 4;
         }
         return 0;
     }

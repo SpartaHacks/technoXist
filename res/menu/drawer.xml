@@ -20,10 +20,4 @@
         android:showAsAction="never"
         android:title="@string/menu_edit_feeds"
         tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/menu_settings_main"
-        android:icon="@drawable/action_settings"
-        android:showAsAction="never"
-        android:title="@string/menu_settings"
-        tools:ignore="AlwaysShowAction" />
 </menu>
