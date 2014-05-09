@@ -236,9 +236,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);
 
-            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                menu.findItem(R.id.menu_hide_read_main).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-            }
 
             mEntriesFragment.setHasOptionsMenu(false);
         } else {
@@ -256,15 +253,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         switch (item.getItemId()) {
-            case R.id.menu_hide_read_main:
-                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
-                    item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
-                } else {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
-                    item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-                }
-                return true;
             case R.id.menu_edit_main:
                 startActivity(new Intent(this, EditFeedsListActivity.class));
                 return true;
