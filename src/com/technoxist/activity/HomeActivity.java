@@ -333,6 +333,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         	startActivity(new Intent(this, GeneralPrefsActivity.class));
            	newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
            	position = 0;
+           	mCurrentDrawerPos = 0; 
         	}
         else {
             long feedOrGroupId = mDrawerAdapter.getItemId(position);
