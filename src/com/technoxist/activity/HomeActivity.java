@@ -178,9 +178,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         else if (mCurrentDrawerPos == N+2) {
             getActionBar().setTitle(android.R.string.search_go);
         }
-        else if (mCurrentDrawerPos == N+3) {
-            getActionBar().setTitle(R.string.all);
-        }
         else {
             getActionBar().setTitle(mTitle);
             if (mIcon != null) {
@@ -355,8 +352,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         if (!newUri.equals(mEntriesFragment.getUri())) {
             mEntriesFragment.setData(newUri, showFeedInfo);
         }
-
-        mDrawerList.setItemChecked(position, true);
 
         // First open => we open the drawer for you
         if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
