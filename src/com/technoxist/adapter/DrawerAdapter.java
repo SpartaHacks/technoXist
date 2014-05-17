@@ -120,43 +120,6 @@ public class DrawerAdapter extends BaseAdapter {
             if (unread != 0) {
                 holder.unreadTxt.setText(String.valueOf(unread));
             }
-        }else if (position >= 0 && position <= N && mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 1)) {
-            holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
-
-            if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
-                holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
-                holder.titleTxt.setAllCaps(true);
-                holder.separator.setVisibility(View.VISIBLE);
-            } else {
-                final long feedId = mFeedsCursor.getLong(POS_ID);
-                Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
-                String FeedName = mFeedsCursor.getString(POS_NAME);
-                if (FeedName.equals("News")){
-                	holder.iconView.setImageResource(R.drawable.news);
-                }
-                else if (FeedName.equals("Help")) {
-                	holder.iconView.setImageResource(R.drawable.help);
-                }
-                else if (FeedName.equals("Reviews")) {
-                	holder.iconView.setImageResource(R.drawable.review);
-                }
-                else{
-                	if (bitmap != null) {
-                        holder.iconView.setImageBitmap(bitmap);
-                    } else {
-                	holder.iconView.setImageResource(R.drawable.icon);
-                    }
-                }
-
-                int unread = mFeedsCursor.getInt(POS_UNREAD);
-                if (unread != 0) {
-                    holder.unreadTxt.setText(String.valueOf(unread));
-                }
-            }
-
-            if (!mFeedsCursor.isNull(POS_GROUP_ID)) { // First level
-                convertView.setPadding(ITEM_PADDING, 0, 0, 0);
-            }
         }else if (position == N+1 && mFeedsCursor.moveToPosition(position - N+1)){
 	    holder.titleTxt.setText(R.string.favorites);
             holder.iconView.setImageResource(R.drawable.dimmed_rating_important);
@@ -170,6 +133,43 @@ public class DrawerAdapter extends BaseAdapter {
     } else if (position == N+3) {
         holder.titleTxt.setText(R.string.menu_settings);
         holder.iconView.setImageResource(R.drawable.settings);
+    }else if (mFeedsCursor.moveToPosition(position - 1)) {
+        holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
+
+        if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
+            holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
+            holder.titleTxt.setAllCaps(true);
+            holder.separator.setVisibility(View.VISIBLE);
+        } else {
+            final long feedId = mFeedsCursor.getLong(POS_ID);
+            Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
+            String FeedName = mFeedsCursor.getString(POS_NAME);
+            if (FeedName.equals("News")){
+            	holder.iconView.setImageResource(R.drawable.news);
+            }
+            else if (FeedName.equals("Help")) {
+            	holder.iconView.setImageResource(R.drawable.help);
+            }
+            else if (FeedName.equals("Reviews")) {
+            	holder.iconView.setImageResource(R.drawable.review);
+            }
+            else{
+            	if (bitmap != null) {
+                    holder.iconView.setImageBitmap(bitmap);
+                } else {
+            	holder.iconView.setImageResource(R.drawable.icon);
+                }
+            }
+
+            int unread = mFeedsCursor.getInt(POS_UNREAD);
+            if (unread != 0) {
+                holder.unreadTxt.setText(String.valueOf(unread));
+            }
+        }
+
+        if (!mFeedsCursor.isNull(POS_GROUP_ID)) { // First level
+            convertView.setPadding(ITEM_PADDING, 0, 0, 0);
+        }
     }return convertView;
     }
 
