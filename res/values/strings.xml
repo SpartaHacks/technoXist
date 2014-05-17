@@ -35,65 +35,11 @@
     <string name="back_again_to_quit">Press back once more to exit</string>
 
     <!-- FEEDS -->
-    <string name="feeds">Feeds</string>
-    <string name="menu_add_feed">Add feed</string>
-    <string name="no_feeds">No feeds</string>
-    <string name="no_filters">No rules</string>
-    <string name="context_menu_delete">Delete</string>
-    <string name="edit_feed_title">Edit feed</string>
-    <string name="menu_edit_feeds">Edit feeds</string>
-    <string name="new_feed_title">New feed</string>
-    <string name="context_menu_edit">Edit</string>
-    <string name="menu_add_group">Add group</string>
-    <string name="menu_import">Import from OPML</string>
-    <string name="menu_export">Export to OPML</string>
     <string name="error_feed_error">The feed address could not accessed.</string>
     <string name="error_feed_process">The feed can not be processed.</string>
-    <string name="error_feed_url_exists">The address already exists.</string>
-    <string name="error_feed_import">The selected file could not be imported.</string>
-    <string name="error_feed_export">The export has failed. Make sure you have a writable SD-card
-        mounted.
-    </string>
-    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not
-        available.
-    </string>
-    <string name="feed_url">URL address</string>
-    <string name="optional">(optional)</string>
-    <string name="website_or_feed">(website or feed)</string>
-    <string name="tab_feed_title">Feed</string>
-    <string name="tab_filters_title">Filter</string>
-    <string name="feed_title">TITLE</string>
-    <string name="feed_filters">FILTER RULES</string>
-    <string name="filter_add_title">Add rule</string>
-    <string name="filter_delete_title">Delete rule</string>
-    <string name="filter_edit_title">Edit rule</string>
-    <string name="filter_is_regex">is a regular expression</string>
-    <string name="filter_apply_to_title">Apply to title</string>
-    <string name="filter_apply_to_content">Apply to content</string>
-    <string name="accept">ACCEPT</string>
-    <string name="reject">REJECT</string>
-    <string name="feed_search">Feed search</string>
-    <string name="feed_search_by_web_search">Find feed by key words</string>
-    <string name="feed_search_by_topic">Generate feed by topic (via Faroo)</string>
-    <string name="feed_search_by_youtube">Find feed by Youtube channel name</string>
-    <string name="select_file">Select file (SD-root)</string>
-    <string name="question_delete_feed">Do you really want to delete this feed?</string>
-    <string name="question_delete_group">Do you really want to delete this group and all of its
-        feeds?
-    </string>
-    <string name="question_delete_filter">Do you really want to delete this filter?</string>
-    <string name="add_group_title">Select group name</string>
-    <string name="edit_group_title">Edit group name</string>
-    <string name="message_exported_to">Exported into %s.</string>
-    <string name="to_group_title">Feed move action</string>
-    <string name="to_group_message">You can either put this feed into or above this group. What do
-        you want to do?
-    </string>
-    <string name="to_group_above">Above the group</string>
-    <string name="to_group_into">Into the group</string>
 
     <!-- ENTRIES -->
-    <string name="all">ALL</string>
+    <string name="all">All</string>
     <string name="favorites">Favorites</string>
     <string name="context_menu_hide_read">Hide read entries</string>
     <string name="context_menu_show_read">Show read entries</string>

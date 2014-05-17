@@ -49,10 +49,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.EditFeedsListActivity"
-            android:label="@string/feeds"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".activity.EntryActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask">
@@ -68,23 +64,6 @@
         <activity android:name=".widget.WidgetConfigActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.EditFeedActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.technoxist.feed" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.INSERT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.dir/vnd.technoxist.feed" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 

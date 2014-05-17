@@ -48,11 +48,9 @@ import android.widget.SearchView;
 
 import com.technoxist.Constants;
 import com.technoxist.R;
-import com.technoxist.activity.EditFeedsListActivity;
 import com.technoxist.adapter.EntriesCursorAdapter;
 import com.technoxist.provider.FeedData;
 import com.technoxist.provider.FeedData.EntryColumns;
-import com.technoxist.provider.FeedData.FeedColumns;
 import com.technoxist.provider.FeedDataContentProvider;
 import com.technoxist.service.FetcherService;
 import com.technoxist.utils.PrefUtils;
@@ -195,7 +193,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     @Override
     public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
-
         if (mEntriesCursorAdapter != null) {
             setListAdapter(mEntriesCursorAdapter);
         }
@@ -268,20 +265,14 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_refresh).setVisible(false);
-            menu.findItem(R.id.menu_edit).setVisible(false);
         } else if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_share_starred).setVisible(false);
-            menu.findItem(R.id.menu_edit).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
 
             if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                 menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-            }
-
-            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
-                menu.findItem(R.id.menu_edit).setTitle(R.string.edit_feed_title);
             }
         }
 
@@ -329,14 +320,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 } else {
                     PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
                     item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-                }
-                return true;
-            }
-            case R.id.menu_edit: {
-                if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
-                    startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(mUri.getPathSegments().get(1))));
-                } else {
-                    startActivity(new Intent(getActivity(), EditFeedsListActivity.class));
                 }
                 return true;
             }
