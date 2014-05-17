@@ -21,12 +21,6 @@
         android:title="@string/menu_all_read"
         tools:ignore="AlwaysShowAction"/>
     <item
-        android:id="@+id/menu_edit"
-        android:icon="@drawable/content_edit"
-        android:showAsAction="never"
-        android:title="@string/menu_edit_feeds"
-        tools:ignore="AlwaysShowAction"/>
-    <item
         android:id="@+id/menu_share_starred"
         android:icon="@drawable/social_share"
         android:showAsAction="always"
