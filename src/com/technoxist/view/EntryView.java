@@ -73,9 +73,6 @@ import java.util.Date;
 public class EntryView extends WebView {
 
     public interface OnActionListener {
-        public void onClickOriginalText();
-
-        public void onClickFullText();
 
         public void onClickEnclosure();
     }
@@ -195,14 +192,8 @@ public class EntryView extends WebView {
             dateStringBuilder.append(" | ").append(author);
         }
 
-        content.append(dateStringBuilder).append(SUBTITLE_END).append(contentText).append(BUTTON_SECTION_START).append(BUTTON_START);
+        content.append(dateStringBuilder).append(SUBTITLE_END).append(contentText).append(BUTTON_SECTION_START);
 
-        if (!preferFullText) {
-            content.append(context.getString(R.string.get_full_text)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickFullText();");
-        } else {
-            content.append(context.getString(R.string.original_text)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickOriginalText();");
-        }
-        content.append(BUTTON_END);
 
         if (enclosure != null && enclosure.length() > 6 && !enclosure.contains(IMAGE_ENCLOSURE)) {
             content.append(BUTTON_START).append(context.getString(R.string.see_enclosure)).append(BUTTON_MIDDLE)
@@ -274,15 +265,6 @@ public class EntryView extends WebView {
             return "injectedJSObject";
         }
 
-        @JavascriptInterface
-        public void onClickOriginalText() {
-            mListener.onClickOriginalText();
-        }
-
-        @JavascriptInterface
-        public void onClickFullText() {
-            mListener.onClickFullText();
-        }
 
         @JavascriptInterface
         public void onClickEnclosure() {

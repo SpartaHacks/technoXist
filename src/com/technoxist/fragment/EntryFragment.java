@@ -38,8 +38,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -479,59 +477,6 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     private void toggleFullScreen() {
         BaseActivity activity = (BaseActivity) getActivity();
         activity.toggleFullScreen();
-    }
-
-    @Override
-    public void onClickOriginalText() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mPreferFullText = false;
-                mEntryPagerAdapter.displayEntry(mCurrentPagerPos, null, true);
-            }
-        });
-    }
-
-    @Override
-    public void onClickFullText() {
-        final BaseActivity activity = (BaseActivity) getActivity();
-
-        if (!isRefreshing()) {
-            Cursor cursor = mEntryPagerAdapter.getCursor(mCurrentPagerPos);
-            final boolean alreadyMobilized = !cursor.isNull(mMobilizedHtmlPos);
-
-            if (alreadyMobilized) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPreferFullText = true;
-                        mEntryPagerAdapter.displayEntry(mCurrentPagerPos, null, true);
-                    }
-                });
-            } else {
-                ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-                final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-                // since we have acquired the networkInfo, we use it for basic checks
-                if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                    FetcherService.addEntriesToMobilize(new long[]{mEntriesIds[mCurrentPagerPos]});
-                    activity.startService(new Intent(activity, FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showSwipeProgress();
-                        }
-                    });
-                } else {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(activity, R.string.network_error, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        }
     }
 
     @Override
