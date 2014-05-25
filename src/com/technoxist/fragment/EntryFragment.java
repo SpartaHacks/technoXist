@@ -149,9 +149,6 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     view.setHtml(mEntriesIds[pagerPos], title, link, contentText, enclosure, author, timestamp, mPreferFullText);
                     view.setTag(newCursor);
 
-                    if (pagerPos == mCurrentPagerPos) {
-                        refreshUI(newCursor);
-                    }
                 }
             }
         }
