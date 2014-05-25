@@ -441,7 +441,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
             // Listen the mobilizing task
             if (FetcherService.hasMobilizationTask(mEntriesIds[mCurrentPagerPos])) {
-                showSwipeProgress();
+                hideSwipeProgress();
             } else {
                 hideSwipeProgress();
             }
