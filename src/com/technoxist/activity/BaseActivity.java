@@ -31,16 +31,10 @@ import com.technoxist.Constants;
 
 public abstract class BaseActivity extends Activity {
 
-    public interface OnFullScreenListener {
-        public void onFullScreenEnabled(boolean isImmersive);
-
-        public void onFullScreenDisabled();
-    }
-
-    private static final String STATE_IS_FULLSCREEN = "STATE_IS_FULLSCREEN";
-
-    private boolean mIsFullScreen;
-    private View mDecorView;
+	private static final String STATE_IS_NORMAL_FULLSCREEN = "STATE_IS_NORMAL_FULLSCREEN";
+	private static final String STATE_IS_IMMERSIVE_FULLSCREEN = "STATE_IS_IMMERSIVE_FULLSCREEN";
+	private boolean mIsNormalFullScreen, mIsImmersiveFullScreen;
+	private View mDecorView;
 
     private OnFullScreenListener mOnFullScreenListener;
 
@@ -48,31 +42,35 @@ public abstract class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDecorView = getWindow().getDecorView();
-        mDecorView.setOnSystemUiVisibilityChangeListener
-                (new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) { // We are not un fullscreen mode
+        
+     // For immersive mode
+        if (android.os.Build.VERSION.SDK_INT >= 19) {
+        	mDecorView.setOnSystemUiVisibilityChangeListener
+        			(new View.OnSystemUiVisibilityChangeListener() {
+        				@Override
+        				public void onSystemUiVisibilityChange(int visibility) {
+        					if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) { // We are not in fullscreen mode
+        						
+        						if (mIsImmersiveFullScreen) { // It was fullscreen, we need to change it
+        							setImmersiveFullScreen(false);
+        							mIsImmersiveFullScreen = false;
+        							
+        							if (mOnFullScreenListener != null) {
+        								mOnFullScreenListener.onFullScreenDisabled();
+        							}
+        							}
+        				} else { // We are now in fullscreen mode
+        					if (!mIsImmersiveFullScreen) { // It was not-fullscreen, we need to change it
+        						mIsImmersiveFullScreen = true;
 
-                            if (mIsFullScreen) { // It was fullscreen, we need to change it
-                                toggleFullScreen();
-                                mIsFullScreen = false;
-
-                                if (mOnFullScreenListener != null) {
-                                    mOnFullScreenListener.onFullScreenDisabled();
-                                }
-                            }
-                        } else { // We are now in fullscreen mode
-                            if (!mIsFullScreen) { // It was not-fullscreen, we need to change it
-                                mIsFullScreen = true;
-
-                                if (mOnFullScreenListener != null) {
-                                    mOnFullScreenListener.onFullScreenEnabled(android.os.Build.VERSION.SDK_INT >= 19);
+        						 if (mOnFullScreenListener != null) {
+        							 mOnFullScreenListener.onFullScreenEnabled(true, false);
+        							 }
                                 }
                             }
                         }
-                    }
-                });
+        });
+        	}
     }
 
     @Override
@@ -81,25 +79,24 @@ public abstract class BaseActivity extends Activity {
             Constants.NOTIF_MGR.cancel(0);
         }
 
-        if (mIsFullScreen && getActionBar().isShowing()) { // This is needed for the immersive mode
-            mIsFullScreen = false;
-            toggleFullScreen();
-        }
-
         super.onResume();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(STATE_IS_FULLSCREEN, mIsFullScreen);
+    	outState.putBoolean(STATE_IS_NORMAL_FULLSCREEN, mIsNormalFullScreen);
+    	outState.putBoolean(STATE_IS_IMMERSIVE_FULLSCREEN, mIsImmersiveFullScreen);
 
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState.getBoolean(STATE_IS_FULLSCREEN)) {
-            toggleFullScreen();
+    	if (savedInstanceState.getBoolean(STATE_IS_IMMERSIVE_FULLSCREEN)) {
+    		setImmersiveFullScreen(true);
+    		}
+    	else if (savedInstanceState.getBoolean(STATE_IS_NORMAL_FULLSCREEN)) {
+    		setNormalFullScreen(true);
         }
 
         super.onRestoreInstanceState(savedInstanceState);
@@ -110,41 +107,69 @@ public abstract class BaseActivity extends Activity {
     }
 
     public boolean isFullScreen() {
-        return mIsFullScreen;
+    	return mIsNormalFullScreen || mIsImmersiveFullScreen;
+    	}
+    	
+    	public boolean isNormalFullScreen() {
+    	return mIsNormalFullScreen;
+    	}
+    	
+    	public void setNormalFullScreen(boolean fullScreen) {
+    	setNormalFullScreen(fullScreen, false);
+    	}
+    	
+    	public boolean isImmersiveFullScreen() {
+    	return mIsImmersiveFullScreen;
     }
 
     @SuppressLint("InlinedApi")
-    public void toggleFullScreen() {
-        if (!mIsFullScreen) {
+    public void setImmersiveFullScreen(boolean fullScreen) {
+    	if (fullScreen) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            } else {
-                mIsFullScreen = true;
-
-                getActionBar().hide();
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-
-                if (mOnFullScreenListener != null) {
-                    mOnFullScreenListener.onFullScreenEnabled(false);
-                }
             }
-        } else {
+            else {
+            	setNormalFullScreen(true, true);
+            }
+        } 
+    	else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-            } else {
-                mIsFullScreen = false;
+            } 
+            else {
+            	setNormalFullScreen(false, true);
+            	}
+           }
+    }
+            	
+            	private void setNormalFullScreen(boolean fullScreen, boolean isImmersiveFallback) {
+            	if (fullScreen) {
+            	mIsNormalFullScreen = true;
 
-                getActionBar().show();
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            	getActionBar().hide();
+            	getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            	getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-                if (mOnFullScreenListener != null) {
-                    mOnFullScreenListener.onFullScreenDisabled();
-                }
+            	if (mOnFullScreenListener != null) {
+            		mOnFullScreenListener.onFullScreenEnabled(false, isImmersiveFallback);
+            		}
+            		} else {
+            		mIsNormalFullScreen = false;
+            		
+            		getActionBar().show();
+            		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            		
+            		if (mOnFullScreenListener != null) {
+            		mOnFullScreenListener.onFullScreenDisabled();
             }
         }
     }
+            	public interface OnFullScreenListener {
+            		public void onFullScreenEnabled(boolean isImmersive, boolean isImmersiveFallback);
+            		
+            		public void onFullScreenDisabled();
+            		}
 }

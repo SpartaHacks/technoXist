@@ -54,10 +54,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.technoxist.Constants;
@@ -70,12 +72,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-public class EntryView extends WebView {
-
-    public interface OnActionListener {
-
-        public void onClickEnclosure();
-    }
+public class EntryView extends FrameLayout {
 
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
@@ -125,26 +122,34 @@ public class EntryView extends WebView {
     private static final String LINK_BUTTON_END = "</a></p>";
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
-    private OnActionListener mListener;
-
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
-
+    private OnActionListener mListener;
+    private WebView mWebView;
+    private FrameLayout mVideoLayout;
     public EntryView(Context context) {
         super(context);
 
-        setupWebview();
+        init(context, null, 0);
     }
 
     public EntryView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        setupWebview();
+        init(context, attrs, 0);
     }
 
     public EntryView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        setupWebview();
+        init(context, attrs, defStyle);
+        }
+        
+        public void onResume() {
+        mWebView.onResume();
+        }
+        
+        public void onPause() {
+        mWebView.onPause();
     }
 
     public void setListener(OnActionListener listener) {
@@ -154,14 +159,14 @@ public class EntryView extends WebView {
     public void setHtml(long entryId, String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
     	if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
         	contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
-            if (getSettings().getBlockNetworkImage()) {
+            if (mWebView.getSettings().getBlockNetworkImage()) {
                 // setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
-                loadData("", TEXT_HTML, Constants.UTF8);
-                getSettings().setBlockNetworkImage(false);
+            	mWebView.loadData("", TEXT_HTML, Constants.UTF8);
+            	mWebView.getSettings().setBlockNetworkImage(false);
             }
     	} else {
             contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
-            getSettings().setBlockNetworkImage(true);
+            mWebView.getSettings().setBlockNetworkImage(true);
         }
     	
 
@@ -173,7 +178,7 @@ public class EntryView extends WebView {
         // }
 
         // do not put 'null' to the base url...
-        loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
+    	mWebView.loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
     }
 
     private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
@@ -210,10 +215,15 @@ public class EntryView extends WebView {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void setupWebview() {
+    private void init(Context context, AttributeSet attrs, int defStyle) {
+    	mWebView = new WebView(context, attrs, defStyle);
+    	addView(mWebView);
+    	mVideoLayout = new FrameLayout(context, attrs, defStyle);
+    	addView(mVideoLayout);
+    	
         // For scrolling
         setHorizontalScrollBarEnabled(false);
-        getSettings().setUseWideViewPort(false);
+        mWebView.getSettings().setUseWideViewPort(false);
 
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
@@ -221,17 +231,60 @@ public class EntryView extends WebView {
         // Text zoom level from preferences
         int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
         if (fontSize != 0) {
-            getSettings().setTextZoom(100 + (fontSize * 20));
+        	mWebView.getSettings().setTextZoom(100 + (fontSize * 20));
         }
 
         // For javascript
-        getSettings().setJavaScriptEnabled(true);
-        addJavascriptInterface(mInjectedJSObject, mInjectedJSObject.toString());
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.addJavascriptInterface(mInjectedJSObject, mInjectedJSObject.toString());
 
         // For HTML5 video
-        setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(new WebChromeClient() {
+        	private View mCustomView;
+        	private WebChromeClient.CustomViewCallback mCustomViewCallback;
 
-        setWebViewClient(new WebViewClient() {
+        	@Override
+        	public void onShowCustomView(View view, CustomViewCallback callback) {
+        	// if a view already exists then immediately terminate the new one
+        	if (mCustomView != null) {
+        		callback.onCustomViewHidden();
+        		return;
+        	}
+        	
+        	mCustomView = view;
+        	mWebView.setVisibility(View.GONE);
+        	mVideoLayout.setVisibility(View.VISIBLE);
+        	mVideoLayout.addView(view);
+        	mCustomViewCallback = callback;
+        	
+        	mListener.onStartVideoFullScreen();
+        	}
+        	
+        	@Override
+        	public void onHideCustomView() {
+        		super.onHideCustomView();
+        	
+        		if (mCustomView == null) {
+        			return;
+        		}
+        	
+        		mWebView.setVisibility(View.VISIBLE);
+        		mVideoLayout.setVisibility(View.GONE);
+        	
+        		// Hide the custom view.
+        		mCustomView.setVisibility(View.GONE);
+        	
+        		// Remove the custom view from its container.
+        		mVideoLayout.removeView(mCustomView);
+        		mCustomViewCallback.onCustomViewHidden();
+        	
+        		mCustomView = null;
+        	
+        		mListener.onEndVideoFullScreen();
+        	}
+        });
+        	
+        mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Context context = getContext();
@@ -257,7 +310,14 @@ public class EntryView extends WebView {
             }
         });
     }
-
+    public interface OnActionListener {
+    	public void onClickEnclosure();
+    	
+    	public void onStartVideoFullScreen();
+    	
+    	public void onEndVideoFullScreen();
+    }
+    
     private class JavaScriptObject {
         @Override
         @JavascriptInterface

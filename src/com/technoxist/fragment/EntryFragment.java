@@ -207,7 +207,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         mCancelFullscreenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleFullScreen();
+            	setImmersiveFullScreen(false);
             }
         });
 
@@ -347,7 +347,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     break;
                 }
                 case R.id.menu_full_screen: {
-                    toggleFullScreen();
+                	setImmersiveFullScreen(true);
                     break;
                 }
                 case R.id.menu_copy_clipboard: {
@@ -477,9 +477,9 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         }
     }
 
-    private void toggleFullScreen() {
+    private void setImmersiveFullScreen(boolean fullScreen) {
         BaseActivity activity = (BaseActivity) getActivity();
-        activity.toggleFullScreen();
+        activity.setImmersiveFullScreen(fullScreen);
     }
 
     @Override
@@ -521,7 +521,17 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             }
         });
     }
-
+    @Override
+    public void onStartVideoFullScreen() {
+    BaseActivity activity = (BaseActivity) getActivity();
+    activity.setNormalFullScreen(true);
+    }
+    
+    @Override
+    public void onEndVideoFullScreen() {
+    BaseActivity activity = (BaseActivity) getActivity();
+    activity.setNormalFullScreen(false);
+    }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = new CursorLoader(getActivity(), EntryColumns.CONTENT_URI(mEntriesIds[id]), null, null, null, null);
@@ -562,8 +572,8 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     }
 
     @Override
-    public void onFullScreenEnabled(boolean isImmersive) {
-        if (!isImmersive) {
+    public void onFullScreenEnabled(boolean isImmersive, boolean isImmersiveFallback) {
+    	if (!isImmersive && isImmersiveFallback) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         }
     }
