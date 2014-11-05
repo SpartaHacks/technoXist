@@ -50,6 +50,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.technoxist.Constants;
@@ -64,7 +65,7 @@ import com.technoxist.utils.PrefUtils;
 import com.technoxist.utils.UiUtils;
 import com.technoxist.view.EntryView;
 
-public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.OnActionListener {
+public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
 
     private static final String STATE_BASE_URI = "STATE_BASE_URI";
     private static final String STATE_CURRENT_PAGER_POS = "STATE_CURRENT_PAGER_POS";
@@ -532,6 +533,12 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     BaseActivity activity = (BaseActivity) getActivity();
     activity.setNormalFullScreen(false);
     }
+    @Override
+    public FrameLayout getVideoLayout() {
+        View layout = getView();
+        return (layout == null ? null : (FrameLayout) layout.findViewById(R.id.videoLayout));
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = new CursorLoader(getActivity(), EntryColumns.CONTENT_URI(mEntriesIds[id]), null, null, null, null);

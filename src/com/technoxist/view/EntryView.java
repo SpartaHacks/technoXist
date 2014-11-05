@@ -72,7 +72,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-public class EntryView extends FrameLayout {
+public class EntryView extends WebView {
 
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
@@ -123,9 +123,7 @@ public class EntryView extends FrameLayout {
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
-    private OnActionListener mListener;
-    private WebView mWebView;
-    private FrameLayout mVideoLayout;
+    private EntryViewManager mEntryViewMgr;
     public EntryView(Context context) {
         super(context);
 
@@ -144,29 +142,21 @@ public class EntryView extends FrameLayout {
         init(context, attrs, defStyle);
         }
         
-        public void onResume() {
-        mWebView.onResume();
-        }
-        
-        public void onPause() {
-        mWebView.onPause();
-    }
-
-    public void setListener(OnActionListener listener) {
-        mListener = listener;
+    public void setListener(EntryViewManager manager) {
+        mEntryViewMgr = manager;
     }
 
     public void setHtml(long entryId, String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
     	if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
         	contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
-            if (mWebView.getSettings().getBlockNetworkImage()) {
+            if (getSettings().getBlockNetworkImage()) {
                 // setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
-            	mWebView.loadData("", TEXT_HTML, Constants.UTF8);
-            	mWebView.getSettings().setBlockNetworkImage(false);
+            	loadData("", TEXT_HTML, Constants.UTF8);
+            	getSettings().setBlockNetworkImage(false);
             }
     	} else {
             contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
-            mWebView.getSettings().setBlockNetworkImage(true);
+            getSettings().setBlockNetworkImage(true);
         }
     	
 
@@ -178,7 +168,7 @@ public class EntryView extends FrameLayout {
         // }
 
         // do not put 'null' to the base url...
-    	mWebView.loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
+    	loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
     }
 
     private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
@@ -216,14 +206,10 @@ public class EntryView extends FrameLayout {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void init(Context context, AttributeSet attrs, int defStyle) {
-    	mWebView = new WebView(context, attrs, defStyle);
-    	addView(mWebView);
-    	mVideoLayout = new FrameLayout(context, attrs, defStyle);
-    	addView(mVideoLayout);
     	
         // For scrolling
         setHorizontalScrollBarEnabled(false);
-        mWebView.getSettings().setUseWideViewPort(false);
+        getSettings().setUseWideViewPort(false);
 
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
@@ -231,15 +217,15 @@ public class EntryView extends FrameLayout {
         // Text zoom level from preferences
         int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
         if (fontSize != 0) {
-        	mWebView.getSettings().setTextZoom(100 + (fontSize * 20));
+        	getSettings().setTextZoom(100 + (fontSize * 20));
         }
 
         // For javascript
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(mInjectedJSObject, mInjectedJSObject.toString());
+        getSettings().setJavaScriptEnabled(true);
+        addJavascriptInterface(mInjectedJSObject, mInjectedJSObject.toString());
 
         // For HTML5 video
-        mWebView.setWebChromeClient(new WebChromeClient() {
+       setWebChromeClient(new WebChromeClient() {
         	private View mCustomView;
         	private WebChromeClient.CustomViewCallback mCustomViewCallback;
 
@@ -251,13 +237,17 @@ public class EntryView extends FrameLayout {
         		return;
         	}
         	
-        	mCustomView = view;
-        	mWebView.setVisibility(View.GONE);
-        	mVideoLayout.setVisibility(View.VISIBLE);
-        	mVideoLayout.addView(view);
-        	mCustomViewCallback = callback;
+        	FrameLayout videoLayout = mEntryViewMgr.getVideoLayout();
+            if (videoLayout != null) {
+                mCustomView = view;
         	
-        	mListener.onStartVideoFullScreen();
+                setVisibility(View.GONE);
+                videoLayout.setVisibility(View.VISIBLE);
+                videoLayout.addView(view);
+                mCustomViewCallback = callback;
+
+                mEntryViewMgr.onStartVideoFullScreen();
+            }
         	}
         	
         	@Override
@@ -268,23 +258,26 @@ public class EntryView extends FrameLayout {
         			return;
         		}
         	
-        		mWebView.setVisibility(View.VISIBLE);
-        		mVideoLayout.setVisibility(View.GONE);
+        		FrameLayout videoLayout = mEntryViewMgr.getVideoLayout();
+                if (videoLayout != null) {
+                    setVisibility(View.VISIBLE);
+                    videoLayout.setVisibility(View.GONE);
         	
-        		// Hide the custom view.
-        		mCustomView.setVisibility(View.GONE);
+                 // Hide the custom view.
+                    mCustomView.setVisibility(View.GONE);
         	
-        		// Remove the custom view from its container.
-        		mVideoLayout.removeView(mCustomView);
-        		mCustomViewCallback.onCustomViewHidden();
+                 // Remove the custom view from its container.
+                    videoLayout.removeView(mCustomView);
+                    mCustomViewCallback.onCustomViewHidden();
         	
-        		mCustomView = null;
+                    mCustomView = null;
         	
-        		mListener.onEndVideoFullScreen();
+                    mEntryViewMgr.onEndVideoFullScreen();
+                }
         	}
         });
         	
-        mWebView.setWebViewClient(new WebViewClient() {
+        setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Context context = getContext();
@@ -310,12 +303,14 @@ public class EntryView extends FrameLayout {
             }
         });
     }
-    public interface OnActionListener {
-    	public void onClickEnclosure();
-    	
-    	public void onStartVideoFullScreen();
-    	
-    	public void onEndVideoFullScreen();
+    public interface EntryViewManager {
+        public void onClickEnclosure();
+
+        public void onStartVideoFullScreen();
+
+        public void onEndVideoFullScreen();
+
+        public FrameLayout getVideoLayout();
     }
     
     private class JavaScriptObject {
@@ -328,7 +323,7 @@ public class EntryView extends FrameLayout {
 
         @JavascriptInterface
         public void onClickEnclosure() {
-            mListener.onClickEnclosure();
+        	mEntryViewMgr.onClickEnclosure();
         }
     }
 }
