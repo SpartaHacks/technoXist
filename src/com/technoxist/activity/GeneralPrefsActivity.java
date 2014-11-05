@@ -51,12 +51,14 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.technoxist.R;
 import com.technoxist.service.RefreshService;
 import com.technoxist.utils.PrefUtils;
 import com.technoxist.utils.UiUtils;
+import com.technoxist.MainApplication;
 
 public class GeneralPrefsActivity extends PreferenceActivity {
     @Override
@@ -91,7 +93,10 @@ public class GeneralPrefsActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 PrefUtils.putBoolean(PrefUtils.LIGHT_THEME, Boolean.TRUE.equals(newValue));
-                android.os.Process.killProcess(android.os.Process.myPid());
+
+                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are writen
+
+                android.os.Process.killProcess(android.os.Process.myPid()); // Restart the app
 
                 // this return statement will never be reached
                 return true;
