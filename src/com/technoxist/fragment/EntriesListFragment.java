@@ -108,7 +108,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            mEntriesCursorAdapter.swapCursor(null);
+            mEntriesCursorAdapter.swapCursor(Constants.EMPTY_CURSOR);
         }
     };
 
@@ -168,7 +168,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
             mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
 
-            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
         }
     }
 
@@ -230,12 +230,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
 
         return rootView;
-    }
-
-    @Override
-    public void onStop() {
-        PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
-        super.onStop();
     }
 
     @Override
@@ -351,7 +345,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
 
-        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
 
         mListDisplayDate = new Date().getTime();
