@@ -443,6 +443,11 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             // Listen the mobilizing task
             if (FetcherService.hasMobilizationTask(mEntriesIds[mCurrentPagerPos])) {
                 hideSwipeProgress();
+                
+             // Start services here if not already started to avoid an infinite loading
+                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+                    MainApplication.getContext().startService(new Intent(MainApplication.getContext(), FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
+                }
             } else {
                 hideSwipeProgress();
             }
