@@ -6,15 +6,20 @@ buildscript {
         classpath 'com.android.tools.build:gradle:+'
     }
 }
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
+
+    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:cardview-v7:+'
+    compile 'com.android.support:recyclerview-v7:+'
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    buildToolsVersion '19.0.3'
 
     sourceSets {
         main {
