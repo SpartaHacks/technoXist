@@ -529,14 +529,14 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     }
     @Override
     public void onStartVideoFullScreen() {
-    BaseActivity activity = (BaseActivity) getActivity();
-    activity.setNormalFullScreen(true);
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setVideoFullScreen(true);
     }
-    
+
     @Override
     public void onEndVideoFullScreen() {
-    BaseActivity activity = (BaseActivity) getActivity();
-    activity.setNormalFullScreen(false);
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setVideoFullScreen(false);
     }
     @Override
     public FrameLayout getVideoLayout() {

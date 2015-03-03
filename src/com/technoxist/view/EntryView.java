@@ -124,6 +124,10 @@ public class EntryView extends WebView {
 
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
     private EntryViewManager mEntryViewMgr;
+    public View mCustomView;
+    public VideoWebView mVideoView;
+    private FrameLayout videoLayout;
+
     public EntryView(Context context) {
         super(context);
 
@@ -206,7 +210,7 @@ public class EntryView extends WebView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void init(Context context, AttributeSet attrs, int defStyle) {
-    	
+
         // For scrolling
         setHorizontalScrollBarEnabled(false);
         getSettings().setUseWideViewPort(false);
@@ -224,59 +228,10 @@ public class EntryView extends WebView {
         getSettings().setJavaScriptEnabled(true);
         addJavascriptInterface(mInjectedJSObject, mInjectedJSObject.toString());
 
-        // For HTML5 video
-       setWebChromeClient(new WebChromeClient() {
-        	private View mCustomView;
-        	private WebChromeClient.CustomViewCallback mCustomViewCallback;
+        // For HTML5 Video
+        mVideoView = new VideoWebView();
+        setWebChromeClient(mVideoView);
 
-        	@Override
-        	public void onShowCustomView(View view, CustomViewCallback callback) {
-        	// if a view already exists then immediately terminate the new one
-        	if (mCustomView != null) {
-        		callback.onCustomViewHidden();
-        		return;
-        	}
-        	
-        	FrameLayout videoLayout = mEntryViewMgr.getVideoLayout();
-            if (videoLayout != null) {
-                mCustomView = view;
-        	
-                setVisibility(View.GONE);
-                videoLayout.setVisibility(View.VISIBLE);
-                videoLayout.addView(view);
-                mCustomViewCallback = callback;
-
-                mEntryViewMgr.onStartVideoFullScreen();
-            }
-        	}
-        	
-        	@Override
-        	public void onHideCustomView() {
-        		super.onHideCustomView();
-        	
-        		if (mCustomView == null) {
-        			return;
-        		}
-        	
-        		FrameLayout videoLayout = mEntryViewMgr.getVideoLayout();
-                if (videoLayout != null) {
-                    setVisibility(View.VISIBLE);
-                    videoLayout.setVisibility(View.GONE);
-        	
-                 // Hide the custom view.
-                    mCustomView.setVisibility(View.GONE);
-        	
-                 // Remove the custom view from its container.
-                    videoLayout.removeView(mCustomView);
-                    mCustomViewCallback.onCustomViewHidden();
-        	
-                    mCustomView = null;
-        	
-                    mEntryViewMgr.onEndVideoFullScreen();
-                }
-        	}
-        });
-        	
         setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -303,6 +258,51 @@ public class EntryView extends WebView {
             }
         });
     }
+    // For HTML5 video
+    public class VideoWebView extends WebChromeClient {
+        private WebChromeClient.CustomViewCallback mCustomViewCallback;
+
+        @Override
+        public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+            // if a view already exists then immediately terminate the new one
+            if (mCustomView != null) {
+                callback.onCustomViewHidden();
+                return;
+            }
+
+
+            videoLayout = mEntryViewMgr.getVideoLayout();
+            videoLayout.addView(view);
+            mCustomView = view;
+            mCustomViewCallback = callback;
+            videoLayout.setVisibility(View.VISIBLE);
+            setVisibility(View.GONE);
+            mEntryViewMgr.onStartVideoFullScreen();
+
+        }
+
+        @Override
+        public void onHideCustomView() {
+            super.onHideCustomView();
+
+            if (mCustomView == null) {
+                return;
+            }
+
+            videoLayout = mEntryViewMgr.getVideoLayout();
+
+            setVisibility(View.VISIBLE);
+            // Hide the custom view.
+            mCustomView.setVisibility(View.GONE);
+            // Remove the custom view from its container.
+            videoLayout.removeView(mCustomView);
+            mCustomView = null;
+            videoLayout.setVisibility(View.GONE);
+            mCustomViewCallback.onCustomViewHidden();
+            mEntryViewMgr.onEndVideoFullScreen();
+        }
+    }
+
     public interface EntryViewManager {
         public void onClickEnclosure();
 
@@ -312,7 +312,7 @@ public class EntryView extends WebView {
 
         public FrameLayout getVideoLayout();
     }
-    
+
     private class JavaScriptObject {
         @Override
         @JavascriptInterface

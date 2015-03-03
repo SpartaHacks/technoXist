@@ -24,6 +24,7 @@ package com.technoxist.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.technoxist.Constants;
 import com.technoxist.R;
@@ -65,6 +66,16 @@ public class EntryActivity extends BaseActivity {
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        FrameLayout video = (FrameLayout) findViewById(R.id.videoLayout);
+        if(video.getVisibility() == FrameLayout.VISIBLE ) {
+            // DO Nothing
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
