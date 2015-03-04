@@ -149,7 +149,6 @@ public abstract class BaseActivity extends Activity {
         if (fullScreen) {
             mIsVideoFullscreen = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                getActionBar().hide();
                 mDecorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
