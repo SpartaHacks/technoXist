@@ -55,6 +55,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -189,7 +190,8 @@ public class FetcherService extends IntentService {
 
                         Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getContext()) //
                                 .setContentIntent(contentIntent) //
-                                .setSmallIcon(R.drawable.icon) //
+                                .setSmallIcon(R.drawable.ic_statusbar) //
+                                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon)) //
                                 .setTicker(text) //
                                 .setContentInfo(unreadText)
                                 .setWhen(System.currentTimeMillis()) //

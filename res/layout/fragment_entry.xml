@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
@@ -20,12 +19,10 @@
         android:background="@drawable/round_background"
         android:src="@drawable/cancel_full_screen"
         android:visibility="gone" />
-
     <FrameLayout
         android:id="@+id/videoLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         android:background="@android:color/black"/>
-    
 </RelativeLayout>

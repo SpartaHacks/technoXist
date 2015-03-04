@@ -51,7 +51,7 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_UNREAD = 8;
 
     private static final int ITEM_PADDING = UiUtils.dpToPixel(20);
-    private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
+    private static final int NORMAL_TEXT_COLOR = Color.parseColor("#000000");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
     private static final int CACHE_MAX_ENTRIES = 100;
@@ -120,7 +120,7 @@ public class DrawerAdapter extends BaseAdapter {
             if (unread != 0) {
                 holder.unreadTxt.setText(String.valueOf(unread));
             }
-        }else if (position == N+1 && mFeedsCursor.moveToPosition(position - N+1)){
+        }else if (position == N+1){
 	    holder.titleTxt.setText(R.string.favorites);
             holder.iconView.setImageResource(R.drawable.dimmed_rating_important);
             int unread = mFavoritesNumber;
@@ -129,11 +129,8 @@ public class DrawerAdapter extends BaseAdapter {
             }
 	} else if (position == N+2) {
             holder.titleTxt.setText(android.R.string.search_go);
-            holder.iconView.setImageResource(R.drawable.action_search);
-    } else if (position == N+3) {
-        holder.titleTxt.setText(R.string.menu_settings);
-        holder.iconView.setImageResource(R.drawable.settings);
-    }else if (mFeedsCursor.moveToPosition(position - 1)) {
+            holder.iconView.setImageResource(android.R.drawable.ic_menu_search);
+    } else if (mFeedsCursor.moveToPosition(position - 1)) {
         holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
         if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
@@ -176,7 +173,7 @@ public class DrawerAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if (mFeedsCursor != null) {
-            return mFeedsCursor.getCount() + 4;
+            return mFeedsCursor.getCount() + 3;
         }
         return 0;
     }

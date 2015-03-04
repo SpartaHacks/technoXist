@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<style name="Theme.Light" parent="android:Theme.Holo.Light.DarkActionBar">
-    	<item name="android:actionBarStyle">@style/LightActionBar</item>
-    	<item name="android:windowAnimationStyle">@style/FadeAnimation</item>
-		<item name="card">@drawable/bg_card_light</item>
-	</style>
-	
-<style name="Theme.Dark" parent="android:Theme.Holo">
-    	<item name="android:actionBarStyle">@style/DarkActionBar</item>
-    	<item name="android:windowAnimationStyle">@style/FadeAnimation</item>
-		<item name="card">@drawable/bg_card_dark</item>
-		
-	</style>
-<style name="LightActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/actionbar_blue</item>
-        
-    </style>	
-<style name="DarkActionBar" parent="@android:style/Widget.Holo.ActionBar.Solid" />
-<style name="FadeAnimation" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
-        <item name="android:activityOpenExitAnimation">@anim/hold</item>
-        <item name="android:activityCloseEnterAnimation">@anim/hold</item>
-        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
+
+    <style name="Theme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/item_drawer_list_selector</item>
+        <!-- customize the color palette -->
+        <item name="colorPrimary">@color/light_theme_color_primary</item>
+        <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
+        <item name="colorAccent">@color/light_theme_color_primary</item>
+        <item name="card">@drawable/bg_card_light</item>
+    </style>
+
+    <style name="Theme.Dark" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <!-- customize the color palette -->
+        <item name="colorPrimary">@color/dark_theme_color_primary</item>
+        <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
+        <item name="colorAccent">@color/light_theme_color_primary</item>
+        <item name="card">@drawable/bg_card_dark</item>
     </style>
 </resources>

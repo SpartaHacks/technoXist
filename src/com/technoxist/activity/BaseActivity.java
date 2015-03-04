@@ -21,28 +21,29 @@
 package com.technoxist.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.technoxist.Constants;
 
-public abstract class BaseActivity extends Activity {
+public class BaseActivity extends ActionBarActivity {
 
 	private static final String STATE_IS_NORMAL_FULLSCREEN = "STATE_IS_NORMAL_FULLSCREEN";
 	private static final String STATE_IS_IMMERSIVE_FULLSCREEN = "STATE_IS_IMMERSIVE_FULLSCREEN";
 	private boolean mIsNormalFullScreen, mIsImmersiveFullScreen, mIsVideoFullscreen;
 	private View mDecorView;
 
-    private OnFullScreenListener mOnFullScreenListener;
 
+    private OnFullScreenListener mOnFullScreenListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDecorView = getWindow().getDecorView();
-        
+
      // For immersive mode
         if (android.os.Build.VERSION.SDK_INT >= 19) {
         	mDecorView.setOnSystemUiVisibilityChangeListener
@@ -60,17 +61,20 @@ public abstract class BaseActivity extends Activity {
         							}
         							}
         				} else { // We are now in fullscreen mode
-        					if (!mIsImmersiveFullScreen) { // It was not-fullscreen, we need to change it
-        						mIsImmersiveFullScreen = true;
+        					    if (!mIsImmersiveFullScreen) { // It was not-fullscreen, we need to change it
+        						    mIsImmersiveFullScreen = true;
 
-        						 if (mOnFullScreenListener != null) {
-        							 mOnFullScreenListener.onFullScreenEnabled(true, false);
-        							 }
+        						    if (mOnFullScreenListener != null) {
+        							     mOnFullScreenListener.onFullScreenEnabled(true, false);
+        						    }
                                 }
-                            }
                         }
-        });
-        	}
+                    }
+            });
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 21) { // Lollipop
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS); // Tweak to allow setting status bar color
+        }
     }
 
     @Override
@@ -81,12 +85,10 @@ public abstract class BaseActivity extends Activity {
 
         super.onResume();
     }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	outState.putBoolean(STATE_IS_NORMAL_FULLSCREEN, mIsNormalFullScreen);
     	outState.putBoolean(STATE_IS_IMMERSIVE_FULLSCREEN, mIsImmersiveFullScreen);
-
         super.onSaveInstanceState(outState);
     }
 
@@ -126,6 +128,7 @@ public abstract class BaseActivity extends Activity {
     public void setImmersiveFullScreen(boolean fullScreen) {
     	if (fullScreen) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                getSupportActionBar().hide();
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -136,6 +139,7 @@ public abstract class BaseActivity extends Activity {
         } 
     	else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                getSupportActionBar().show();
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             } 
             else {
@@ -143,12 +147,12 @@ public abstract class BaseActivity extends Activity {
             	}
            }
     }
-
     public void setVideoFullScreen(boolean fullScreen) {
 
         if (fullScreen) {
             mIsVideoFullscreen = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                getSupportActionBar().hide();
                 mDecorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -164,7 +168,7 @@ public abstract class BaseActivity extends Activity {
         else {
             mIsVideoFullscreen = false;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                getActionBar().show();
+                getSupportActionBar().show();
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             }
             else {
@@ -172,33 +176,32 @@ public abstract class BaseActivity extends Activity {
             }
         }
     }
-            	
             	private void setNormalFullScreen(boolean fullScreen, boolean isImmersiveFallback) {
-            	if (fullScreen) {
-            	mIsNormalFullScreen = true;
+                    if (fullScreen) {
+                        mIsNormalFullScreen = true;
 
-            	getActionBar().hide();
-            	getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            	getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                        getSupportActionBar().hide();
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-            	if (mOnFullScreenListener != null) {
-            		mOnFullScreenListener.onFullScreenEnabled(false, isImmersiveFallback);
-            		}
-            		} else {
-            		mIsNormalFullScreen = false;
-            		
-            		getActionBar().show();
-            		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-            		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            		
-            		if (mOnFullScreenListener != null) {
-            		mOnFullScreenListener.onFullScreenDisabled();
-            }
-        }
-    }
+                        if (mOnFullScreenListener != null) {
+                            mOnFullScreenListener.onFullScreenEnabled(false, isImmersiveFallback);
+                        }
+                    } else {
+                        mIsNormalFullScreen = false;
+
+                        getSupportActionBar().show();
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+                        if (mOnFullScreenListener != null) {
+                            mOnFullScreenListener.onFullScreenDisabled();
+                        }
+                    }
+                }
+
             	public interface OnFullScreenListener {
             		public void onFullScreenEnabled(boolean isImmersive, boolean isImmersiveFallback);
-            		
             		public void onFullScreenDisabled();
             		}
 }

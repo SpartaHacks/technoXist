@@ -2,7 +2,7 @@
  * technoXist
  *
  * Copyright (c) 2014 Suyash Bhatt
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,11 +33,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -77,6 +78,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private EntriesListFragment mEntriesFragment;
     private DrawerLayout mDrawerLayout;
+    private View mLeftDrawer;
     private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -93,7 +95,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
-        
+
         if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
             getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
         } else {
@@ -106,7 +108,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         mTitle = getTitle();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mLeftDrawer = findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.drawer_list);
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
@@ -115,21 +118,21 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 mDrawerLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mDrawerLayout.closeDrawer(mDrawerList);
+                        mDrawerLayout.closeDrawer(mLeftDrawer);
                     }
                 }, 50);
             }
         });
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-        int drawerIcon = R.drawable.ic_drawer_light;
-        if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
-        	drawerIcon = R.drawable.ic_drawer_dark;
-        }
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, drawerIcon, R.string.drawer_open, R.string.drawer_close) {
-            @Override
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerStateChanged(int newState) {
                 if (mIsDrawerMoving && newState == DrawerLayout.STATE_IDLE) {
                     mIsDrawerMoving = false;
@@ -138,7 +141,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     mIsDrawerMoving = true;
                     invalidateOptionsMenu();
                 }
-
                 super.onDrawerStateChanged(newState);
             }
         };
@@ -159,29 +161,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ON_OPEN_ENABLED, false)) {
             if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
                 startService(new Intent(HomeActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
-            }
-        }
-    }
-
-    private void refreshTitleAndIcon() {
-    	Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, FeedColumns._ID, null, null);
-    	cursor.moveToFirst();
-    	N = cursor.getInt(0);
-    	cursor.close();
-        getActionBar().setTitle(mTitle);
-        if (mCurrentDrawerPos == 0) {
-            getActionBar().setTitle(R.string.all);
-        }
-        else if (mCurrentDrawerPos == N+1) {
-            getActionBar().setTitle(R.string.favorites);
-        }
-        else if (mCurrentDrawerPos == N+2) {
-            getActionBar().setTitle(android.R.string.search_go);
-        }
-        else {
-            getActionBar().setTitle(mTitle);
-            if (mIcon != null) {
-                
             }
         }
     }
@@ -221,25 +200,16 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }, 3000);
     }
 
+    /* Called whenever we call invalidateOptionsMenu() */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        boolean isOpened = mDrawerLayout.isDrawerOpen(mDrawerList);
-        if (isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
-            
-            getActionBar().setIcon(R.drawable.drawer_icon);
-
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.drawer, menu);
-
-
-            mEntriesFragment.setHasOptionsMenu(false);
-        } else {
-            refreshTitleAndIcon();
-            mEntriesFragment.setHasOptionsMenu(true);
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean isOpened = mDrawerLayout.isDrawerOpen(mLeftDrawer);
+        if(isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
+            menu.findItem(R.id.menu_hide_read).setVisible(false);
+            menu.findItem(R.id.menu_all_read).setVisible(false);
         }
-
-        return super.onCreateOptionsMenu(menu);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -247,16 +217,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
-        switch (item.getItemId()) {
-            case R.id.menu_refresh_main:
-                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                    MainApplication.getContext().startService(new Intent(MainApplication.getContext(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -295,10 +256,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 @Override
                 public void run() {
                     selectDrawerItem(mCurrentDrawerPos);
-                    refreshTitleAndIcon();
                 }
             });
         }
+    }
+
+    public void onClickSettings(View view) {
+        startActivity(new Intent(this, GeneralPrefsActivity.class));
     }
 
     @Override
@@ -316,7 +280,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         if (position == 0) {
             newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
         }
-        
+
         else if (position == N+1) {
             newUri = EntryColumns.FAVORITES_CONTENT_URI;
         }
@@ -324,11 +288,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             newUri = EntryColumns.SEARCH_URI(mEntriesFragment.getCurrentSearch());
         }
         else if (position == N+3) {
-        	startActivity(new Intent(this, GeneralPrefsActivity.class));
-           	newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
-           	position = 0;
-           	mCurrentDrawerPos = 0;
-        	}
+            startActivity(new Intent(this, GeneralPrefsActivity.class));
+            newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
+            position = 0;
+            mCurrentDrawerPos = 0;
+        }
         else {
             long feedOrGroupId = mDrawerAdapter.getItemId(position);
             if (mDrawerAdapter.isItemAGroup(position)) {
@@ -344,23 +308,44 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 showFeedInfo = false;
             }
             mTitle = mDrawerAdapter.getItemName(position);
-        	}
+        }
 
         if (!newUri.equals(mEntriesFragment.getUri())) {
             mEntriesFragment.setData(newUri, showFeedInfo);
         }
-        
+
         mDrawerList.setItemChecked(position, true);
-       
+
         // First open => we open the drawer for you
         if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
             PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false);
             mDrawerLayout.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mDrawerLayout.openDrawer(mDrawerList);
+                    mDrawerLayout.openDrawer(mLeftDrawer);
                 }
             }, 500);
+        }
+
+        Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, FeedColumns._ID, null, null);
+        cursor.moveToFirst();
+        N = cursor.getInt(0);
+        cursor.close();
+        getSupportActionBar().setTitle(mTitle);
+        if (mCurrentDrawerPos == 0) {
+            getSupportActionBar().setTitle(R.string.all);
+        }
+        else if (mCurrentDrawerPos == N+1) {
+            getSupportActionBar().setTitle(R.string.favorites);
+        }
+        else if (mCurrentDrawerPos == N+2) {
+            getSupportActionBar().setTitle(android.R.string.search_go);
+        }
+        else {
+            getSupportActionBar().setTitle(mTitle);
+            if (mIcon != null) {
+
+            }
         }
     }
 }

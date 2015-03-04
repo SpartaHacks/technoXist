@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<color name="light_entry_list_background">#e5e5e5</color>
-<color name="dark_entry_list_background">#000000</color>
-<color name="actionbar_blue">#ff33b5e5</color>
-<color name="menu_background">#ff333333</color>
-<color name="prefs_background">#ff202020</color>
+    <color name="light_entry_list_background">#eeeeee</color>
+    <color name="dark_entry_list_background">#000000</color>
+    <color name="menu_background">#ffeeeeee</color>
+    <color name="prefs_background">#ff202020</color>
+    <color name="light_theme_color_primary">#4285f4</color>
+    <color name="light_theme_color_primary_dark">#3367d6</color>
+    <color name="dark_theme_color_primary">#175073</color>
+    <color name="dark_theme_color_primary_dark">#ff10364e</color>
+    <color name="drawer_select">#ffeeeeee</color>
 </resources>

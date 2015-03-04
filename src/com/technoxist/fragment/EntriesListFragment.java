@@ -233,6 +233,12 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     @Override
+    public void onStop() {
+        PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
+        super.onStop();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(STATE_URI, mUri);
         outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);

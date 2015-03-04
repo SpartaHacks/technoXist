@@ -5,7 +5,7 @@
     android:layout_height="fill_parent">
 	<RelativeLayout 
 	    android:id="@id/widget_heading_frame"
-	    android:background="@color/actionbar_blue"
+	    android:background="@color/light_theme_color_primary"
 	    android:layout_width="fill_parent"
 	    android:layout_height="35.0dip"
 	    android:layout_alignParentTop="true">
@@ -16,7 +16,7 @@
         	android:layout_width="wrap_content"
         	android:layout_height="fill_parent"
         	android:layout_alignParentLeft="true"
-        	android:src="@drawable/drawer_icon" />
+        	android:src="@drawable/ic_statusbar" />
 	    <TextView 
 	        android:textSize="20.0sp"
 	        android:textStyle="bold"

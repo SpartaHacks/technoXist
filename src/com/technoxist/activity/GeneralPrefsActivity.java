@@ -46,67 +46,25 @@
 
 package com.technoxist.activity;
 
-import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.technoxist.R;
-import com.technoxist.service.RefreshService;
-import com.technoxist.utils.PrefUtils;
 import com.technoxist.utils.UiUtils;
-import com.technoxist.MainApplication;
 
-public class GeneralPrefsActivity extends PreferenceActivity {
+public class GeneralPrefsActivity extends BaseActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
-        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
-            getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
-        } else {
-            getWindow().setBackgroundDrawableResource(R.color.prefs_background);
-        }
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addPreferencesFromResource(R.layout.activity_preferences);
+        setContentView(R.layout.activity_preferences);
 
-        setRingtoneSummary();
-
-        Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
-        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (Boolean.TRUE.equals(newValue)) {
-                    startService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
-                } else {
-                    PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-                    stopService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
-                }
-                return true;
-            }
-        });
-
-        preference = findPreference(PrefUtils.LIGHT_THEME);
-        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                PrefUtils.putBoolean(PrefUtils.LIGHT_THEME, Boolean.TRUE.equals(newValue));
-
-                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are writen
-
-                android.os.Process.killProcess(android.os.Process.myPid()); // Restart the app
-
-                // this return statement will never be reached
-                return true;
-            }
-        });
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -118,33 +76,4 @@ public class GeneralPrefsActivity extends PreferenceActivity {
         }
         return true;
     }
-
-
-        @Override
-        protected void onResume() {
-
-            // The ringtone summary text should be updated using
-            // OnSharedPreferenceChangeListener(), but I can't get it to work.
-            // Updating in onResume is a very simple hack that seems to work, but is inefficient.
-
-            setRingtoneSummary();
-            super.onResume();
-
-        }
-
-        private boolean setRingtoneSummary() {
-
-            Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
-            Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
-            if (ringtoneUri.toString().equals("")) {
-                ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
-            } else {
-                Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
-                ringtone_preference.setSummary(ringtone.getTitle(getApplicationContext()));
-            }
-
-            return true;
-        }
-
-
 }

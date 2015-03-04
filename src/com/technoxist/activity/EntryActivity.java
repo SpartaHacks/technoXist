@@ -23,6 +23,7 @@ package com.technoxist.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -49,8 +50,9 @@ public class EntryActivity extends BaseActivity {
         if (savedInstanceState == null) { // Put the data only the first time (the fragment will save its state)
             mEntryFragment.setData(getIntent().getData());
         }
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -67,7 +69,6 @@ public class EntryActivity extends BaseActivity {
 
         return false;
     }
-
     @Override
     public void onBackPressed() {
         FrameLayout video = (FrameLayout) findViewById(R.id.videoLayout);
@@ -77,11 +78,11 @@ public class EntryActivity extends BaseActivity {
             super.onBackPressed();
         }
     }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
         mEntryFragment.setData(intent.getData());
     }
+
 }

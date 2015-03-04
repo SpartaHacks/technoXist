@@ -429,13 +429,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             BaseActivity activity = (BaseActivity) getActivity();
             activity.setTitle(feedTitle);
 
-            byte[] iconBytes = entryCursor.getBlob(mFeedIconPos);
-            Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
-            if (bitmap != null) {
-                activity.getActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
-            } else {
-                activity.getActionBar().setIcon(R.drawable.icon);
-            }
+
 
             mFavorite = entryCursor.getInt(mIsFavoritePos) == 1;
             activity.invalidateOptionsMenu();
@@ -529,14 +523,14 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     }
     @Override
     public void onStartVideoFullScreen() {
-        BaseActivity activity = (BaseActivity) getActivity();
-        activity.setVideoFullScreen(true);
+		BaseActivity activity = (BaseActivity) getActivity();
+		activity.setVideoFullScreen(true);
     }
-
+    
     @Override
     public void onEndVideoFullScreen() {
-        BaseActivity activity = (BaseActivity) getActivity();
-        activity.setVideoFullScreen(false);
+		BaseActivity activity = (BaseActivity) getActivity();
+		activity.setVideoFullScreen(false);
     }
     @Override
     public FrameLayout getVideoLayout() {

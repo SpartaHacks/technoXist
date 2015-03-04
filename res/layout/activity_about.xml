@@ -5,22 +5,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar"/>
+
 
     <ImageView
+        android:id="@+id/about_icon"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/about_icon"
-        android:src="@drawable/icon"
         android:layout_marginTop="20dip"
-        android:layout_marginBottom="5dip"/>
+        android:src="@drawable/icon"/>
 
     <TextView
+        android:id="@+id/about_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/about_title"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dip"
-        android:layout_marginBottom="5dip"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_marginBottom="5dip"/>
 
     <TextView
         android:layout_width="wrap_content"
