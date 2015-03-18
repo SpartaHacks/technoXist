@@ -11,7 +11,7 @@
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_refresh"
-        android:icon="@drawable/refresh"
+        android:icon="@drawable/ic_refresh_white"
         app:showAsAction="always"
         android:title="@string/menu_refresh"
         tools:ignore="AlwaysShowAction"/>
@@ -23,7 +23,7 @@
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_share_starred"
-        android:icon="@drawable/social_share"
+        android:icon="@drawable/ic_share_white"
         app:showAsAction="always"
         android:title="@string/context_menu_share_starred"/>
 

@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Light" parent="Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:activatedBackgroundIndicator">@drawable/item_drawer_list_selector</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/light_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
-        <item name="colorAccent">@color/light_theme_color_primary</item>
-        <item name="card">@drawable/bg_card_light</item>
+        <item name="colorAccent">@color/light_accent</item>
     </style>
 
     <style name="Theme.Dark" parent="Theme.AppCompat">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/item_drawer_list_selector</item>
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/dark_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
-        <item name="colorAccent">@color/light_theme_color_primary</item>
-        <item name="card">@drawable/bg_card_dark</item>
+        <item name="colorAccent">@color/dark_accent</item>
+    </style>
+
+    <style name="ActionBarThemeOverlay" parent="">
+        <item name="android:textColorPrimary">#fff</item>
+        <item name="colorControlNormal">#fff</item>
+        <item name="android:actionModeBackground">@color/light_theme_color_primary</item>
     </style>
 </resources>

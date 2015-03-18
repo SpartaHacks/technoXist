@@ -4,29 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/menu_star"
-        android:icon="@drawable/rating_not_important"
-        app:showAsAction="always"
-        android:title="@string/menu_star"
-        tools:ignore="AlwaysShowAction"/>
-    <item
         android:id="@+id/menu_share"
-        android:icon="@drawable/social_share"
+        android:icon="@drawable/ic_share_white"
         app:showAsAction="always"
         android:title="@string/menu_share"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_full_screen"
-        android:icon="@drawable/full_screen"
+        android:icon="@drawable/ic_fullscreen_white"
         app:showAsAction="always"
         android:title="@string/menu_full_screen"
         tools:ignore="AlwaysShowAction"/>
     <item
+        android:id="@+id/menu_star"
+        android:icon="@drawable/ic_bookmark_outline_white"
+        app:showAsAction="always"
+        android:title="@string/menu_star"
+        tools:ignore="AlwaysShowAction"/>
+    <item
         android:id="@+id/menu_copy_clipboard"
-        android:icon="@drawable/content_copy"
+        android:icon="@drawable/ic_content_copy_white"
         android:title="@string/menu_copy_clipboard"/>
     <item
         android:id="@+id/menu_mark_as_unread"
+        android:icon="@drawable/ic_markunread_white"
         android:title="@string/menu_mark_as_unread"/>
 
 </menu>

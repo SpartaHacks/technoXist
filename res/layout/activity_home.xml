@@ -16,7 +16,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="#ececec">
 
             <fragment
                 android:layout_width="match_parent"
@@ -53,15 +54,22 @@
                 android:layout_width="match_parent"
                 android:background="#eeeeee" />
 
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="48.0dip"
                 android:text="Settings"
+                android:textSize="16.0sp"
+                android:ellipsize="end"
                 android:textColor="@android:color/black"
+                android:drawableLeft="@drawable/ic_settings_grey"
+                android:drawablePadding="36dp"
+                android:paddingLeft="18dp"
                 android:onClick="onClickSettings"
-                android:gravity="left|center_vertical"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
                 android:layout_alignBottom="@+id/drawer_list"/>
+
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"

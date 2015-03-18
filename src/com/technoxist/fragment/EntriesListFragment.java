@@ -2,7 +2,7 @@
  * technoXist
  *
  * Copyright (c) 2014 Suyash Bhatt
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -115,7 +115,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        	CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
             cursorLoader.setUpdateThrottle(150);
             return cursorLoader;
         }
@@ -150,7 +150,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mGestureDetector = new GestureDetector(context, this);
         }
 
-        
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -179,7 +178,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
         if (mUri != null) {
-        	// If the list is empty when we are going back here, try with the last display date
+            // If the list is empty when we are going back here, try with the last display date
             if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
                 mListDisplayDate = new Date().getTime();
             } else {
@@ -376,13 +375,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
 
         if (mNewEntriesNumber > 0) {
-                mNewEntriesNumber = 0;
-                mListDisplayDate = new Date().getTime();
-                refreshUI();
-                if (mUri != null) {
-                    getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                    getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
-                }            
+            mNewEntriesNumber = 0;
+            mListDisplayDate = new Date().getTime();
+            refreshUI();
+            if (mUri != null) {
+                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+            }
         }
     }
 

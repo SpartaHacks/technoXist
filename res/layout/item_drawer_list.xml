@@ -7,9 +7,10 @@
     <!-- icon -->
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="5dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_centerVertical="true" />
 
     <!-- text -->
@@ -20,6 +21,7 @@
         android:layout_toLeftOf="@+id/unread_count"
         android:layout_centerVertical="true"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:paddingLeft="30dp"
         android:orientation="vertical"
         android:gravity="center_vertical">
 

@@ -2,7 +2,7 @@
  * technoXist
  *
  * Copyright (c) 2014 Suyash Bhatt
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -208,7 +208,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         mCancelFullscreenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            	setImmersiveFullScreen(false);
+                setImmersiveFullScreen(false);
             }
         });
 
@@ -297,7 +297,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
         if (mFavorite) {
             MenuItem item = menu.findItem(R.id.menu_star);
-            item.setIcon(R.drawable.rating_important);
+            item.setIcon(R.drawable.ic_bookmark_white);
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -313,9 +313,9 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     mFavorite = !mFavorite;
 
                     if (mFavorite) {
-                        item.setIcon(R.drawable.rating_important);
+                        item.setIcon(R.drawable.ic_bookmark_white);
                     } else {
-                        item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
+                        item.setTitle(R.string.menu_star).setIcon(R.drawable.ic_bookmark_outline_white);
                     }
 
                     final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mCurrentPagerPos]);
@@ -348,7 +348,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     break;
                 }
                 case R.id.menu_full_screen: {
-                	setImmersiveFullScreen(true);
+                    setImmersiveFullScreen(true);
                     break;
                 }
                 case R.id.menu_copy_clipboard: {
@@ -437,8 +437,8 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             // Listen the mobilizing task
             if (FetcherService.hasMobilizationTask(mEntriesIds[mCurrentPagerPos])) {
                 hideSwipeProgress();
-                
-             // Start services here if not already started to avoid an infinite loading
+
+                // Start services here if not already started to avoid an infinite loading
                 if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
                     MainApplication.getContext().startService(new Intent(MainApplication.getContext(), FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
                 }
@@ -523,14 +523,14 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     }
     @Override
     public void onStartVideoFullScreen() {
-		BaseActivity activity = (BaseActivity) getActivity();
-		activity.setVideoFullScreen(true);
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setVideoFullScreen(true);
     }
-    
+
     @Override
     public void onEndVideoFullScreen() {
-		BaseActivity activity = (BaseActivity) getActivity();
-		activity.setVideoFullScreen(false);
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setVideoFullScreen(false);
     }
     @Override
     public FrameLayout getVideoLayout() {
@@ -579,7 +579,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
     @Override
     public void onFullScreenEnabled(boolean isImmersive, boolean isImmersiveFallback) {
-    	if (!isImmersive && isImmersiveFallback) {
+        if (!isImmersive && isImmersiveFallback) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         }
     }

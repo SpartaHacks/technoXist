@@ -2,7 +2,7 @@
  * technoXist
  *
  * Copyright (c) 2014 Suyash Bhatt
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -95,7 +95,7 @@ public class DrawerAdapter extends BaseAdapter {
 
             ViewHolder holder = new ViewHolder();
             holder.iconView = (ImageView) convertView.findViewById(R.id.icon);
-            holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1); 
+            holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
             holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
             holder.separator = convertView.findViewById(R.id.separator);
             convertView.setTag(holder);
@@ -121,53 +121,53 @@ public class DrawerAdapter extends BaseAdapter {
                 holder.unreadTxt.setText(String.valueOf(unread));
             }
         }else if (position == N+1){
-	    holder.titleTxt.setText(R.string.favorites);
-            holder.iconView.setImageResource(R.drawable.dimmed_rating_important);
+            holder.titleTxt.setText(R.string.favorites);
+            holder.iconView.setImageResource(R.drawable.ic_drawer_bookmarks);
             int unread = mFavoritesNumber;
-            if (unread != 0) {
-            holder.unreadTxt.setText(String.valueOf(unread));
-            }
-	} else if (position == N+2) {
-            holder.titleTxt.setText(android.R.string.search_go);
-            holder.iconView.setImageResource(android.R.drawable.ic_menu_search);
-    } else if (mFeedsCursor.moveToPosition(position - 1)) {
-        holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
-
-        if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
-            holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
-            holder.titleTxt.setAllCaps(true);
-            holder.separator.setVisibility(View.VISIBLE);
-        } else {
-            final long feedId = mFeedsCursor.getLong(POS_ID);
-            Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
-            String FeedName = mFeedsCursor.getString(POS_NAME);
-            if (FeedName.equals("News")){
-            	holder.iconView.setImageResource(R.drawable.news);
-            }
-            else if (FeedName.equals("Help")) {
-            	holder.iconView.setImageResource(R.drawable.help);
-            }
-            else if (FeedName.equals("Reviews")) {
-            	holder.iconView.setImageResource(R.drawable.review);
-            }
-            else{
-            	if (bitmap != null) {
-                    holder.iconView.setImageBitmap(bitmap);
-                } else {
-            	holder.iconView.setImageResource(R.drawable.icon);
-                }
-            }
-
-            int unread = mFeedsCursor.getInt(POS_UNREAD);
             if (unread != 0) {
                 holder.unreadTxt.setText(String.valueOf(unread));
             }
-        }
+        } else if (position == N+2) {
+            holder.titleTxt.setText(android.R.string.search_go);
+            holder.iconView.setImageResource(R.drawable.ic_search_grey);
+        } else if (mFeedsCursor.moveToPosition(position - 1)) {
+            holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
-        if (!mFeedsCursor.isNull(POS_GROUP_ID)) { // First level
-            convertView.setPadding(ITEM_PADDING, 0, 0, 0);
-        }
-    }return convertView;
+            if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
+                holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
+                holder.titleTxt.setAllCaps(true);
+                holder.separator.setVisibility(View.VISIBLE);
+            } else {
+                final long feedId = mFeedsCursor.getLong(POS_ID);
+                Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
+                String FeedName = mFeedsCursor.getString(POS_NAME);
+                if (FeedName.equals("News")){
+                    holder.iconView.setImageResource(R.drawable.news);
+                }
+                else if (FeedName.equals("Help")) {
+                    holder.iconView.setImageResource(R.drawable.help);
+                }
+                else if (FeedName.equals("Reviews")) {
+                    holder.iconView.setImageResource(R.drawable.review);
+                }
+                else{
+                    if (bitmap != null) {
+                        holder.iconView.setImageBitmap(bitmap);
+                    } else {
+                        holder.iconView.setImageResource(R.drawable.icon);
+                    }
+                }
+
+                int unread = mFeedsCursor.getInt(POS_UNREAD);
+                if (unread != 0) {
+                    holder.unreadTxt.setText(String.valueOf(unread));
+                }
+            }
+
+            if (!mFeedsCursor.isNull(POS_GROUP_ID)) { // First level
+                convertView.setPadding(ITEM_PADDING, 0, 0, 0);
+            }
+        }return convertView;
     }
 
     @Override
