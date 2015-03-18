@@ -32,6 +32,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -45,7 +46,6 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
-import android.widget.SearchView;
 
 import com.technoxist.Constants;
 import com.technoxist.R;
@@ -202,7 +202,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView.setFastScrollEnabled(false);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
         mListView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up_right));
-        
+
         mSearchView = (SearchView) rootView.findViewById(R.id.searchView);
         if (savedInstanceState != null) {
             refreshUI(); // To hide/show the search bar

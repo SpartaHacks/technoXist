@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <SearchView
+    <android.support.v7.widget.SearchView xmlns:support="http://schemas.android.com/apk/res-auto"
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
+        support:iconifiedByDefault="false"
         android:visibility="gone" />
 
     <FrameLayout
