@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    <Switch
+        android:id="@+id/switch_unread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5.0dip"
+        android:thumb="@drawable/switch_thumb"
+        android:track="@drawable/switch_track" />
+</RelativeLayout>

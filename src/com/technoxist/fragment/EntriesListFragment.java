@@ -32,6 +32,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -45,7 +46,10 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.technoxist.Constants;
 import com.technoxist.R;
@@ -261,19 +265,36 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         menu.clear(); // This is needed to remove a bug on Android 4.0.3
 
         inflater.inflate(R.menu.entry_list, menu);
+        MenuItem switchItem = menu.findItem(R.id.switchRead);
+        View switchView = MenuItemCompat.getActionView(switchItem);
+        Switch mswitch = (Switch) switchView.findViewById(R.id.switch_unread);
+        if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+            mswitch.setChecked(true);
+        } else {
+            mswitch.setChecked(false);
+        }
+
+
+        mswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The switch is enabled
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
+                    Toast.makeText(getActivity(), R.string.show_unread, Toast.LENGTH_SHORT).show();
+                } else {
+                    // The toggle is disabled
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
+                    Toast.makeText(getActivity(), R.string.show_all, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
-            menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_refresh).setVisible(false);
         } else if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
-            menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_share_starred).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
-
-            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -310,16 +331,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 // If we are on "all items" uri, we can remove the notification here
                 if (EntryColumns.CONTENT_URI.equals(mUri) && Constants.NOTIF_MGR != null) {
                     Constants.NOTIF_MGR.cancel(0);
-                }
-                return true;
-            }
-            case R.id.menu_hide_read: {
-                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
-                    item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
-                } else {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
-                    item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
                 }
                 return true;
             }

@@ -41,8 +41,8 @@
     <!-- ENTRIES -->
     <string name="all">All</string>
     <string name="favorites">Bookmarks</string>
-    <string name="context_menu_hide_read">Hide read articles</string>
-    <string name="context_menu_show_read">Show read articles</string>
+    <string name="show_all">Show all</string>
+    <string name="show_unread">Show unread only</string>
     <string name="context_menu_share_starred">Share bookmarked articles</string>
     <string name="menu_star">Bookmark</string>
     <string name="menu_share">Share</string>
