@@ -59,15 +59,6 @@
         android:layout_height="wrap_content"
         android:title="@string/settings_category_content_presentation">
 
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:disableDependentsState="true"
-            android:key="lighttheme"
-            android:summary="@string/settings_light_theme_description"
-            android:title="@string/settings_light_theme" />
-
         <com.technoxist.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -143,7 +134,7 @@
             android:dependency="notifications.enabled"
             android:key="notifications.ringtone"
             android:ringtoneType="notification"
-            android:title="@string/settings_notifications_ringtone_none" />
+            android:title="@string/settings_notifications_ringtone" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"
