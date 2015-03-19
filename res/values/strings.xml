@@ -40,16 +40,16 @@
 
     <!-- ENTRIES -->
     <string name="all">All</string>
-    <string name="favorites">Favorites</string>
-    <string name="context_menu_hide_read">Hide read entries</string>
-    <string name="context_menu_show_read">Show read entries</string>
-    <string name="context_menu_share_starred">Share favorite articles</string>
-    <string name="menu_star">Favorite</string>
+    <string name="favorites">Bookmarks</string>
+    <string name="context_menu_hide_read">Hide read articles</string>
+    <string name="context_menu_show_read">Show read articles</string>
+    <string name="context_menu_share_starred">Share bookmarked articles</string>
+    <string name="menu_star">Bookmark</string>
     <string name="menu_share">Share</string>
     <string name="menu_full_screen">Full screen</string>
     <string name="menu_copy_clipboard">Copy link</string>
     <string name="menu_mark_as_unread">Mark as unread</string>
-    <string name="share_favorites_title">technoxist: favorite entries</string>
+    <string name="share_favorites_title">technoxist: bookmarked articles</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Retrieve the full text</string>
     <string name="original_text">Show original text</string>
@@ -76,25 +76,23 @@
     <string name="settings_category_notifications">Notifications</string>
     <string name="settings_notifications_enabled">Enable notifications</string>
     <string name="settings_notifications_enabled_description">Enable notifications in case of new
-        entries
+        articles
     </string>
     <string name="settings_notifications_ringtone">Ringtone</string>
     <string name="settings_notifications_ringtone_none">None</string>
     <string name="settings_notifications_vibrate">Vibrate</string>
-    <string name="settings_notifications_vibrate_description">Enable the vibration on new entries
+    <string name="settings_notifications_vibrate_description">Enable the vibration on new articles
     </string>
     <string name="settings_category_content_presentation">Content presentation</string>
-    <string name="settings_light_theme">Light theme</string>
-    <string name="settings_light_theme_description">Use the light theme</string>
     <string name="settings_keep_time">Time that the articles will be kept</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in articles</string>
     <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Text size</string>
     <string name="settings_display_oldest_first">Article order</string>
-    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
-	<string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
-    <string name="settings_display_entries_fullscreen_description">Automatically display articles in fullscreen</string>   
+    <string name="settings_display_oldest_first_description">Display oldest articles first</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen articles</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display articles in fullscreen</string>
     <string name="settings_refresh_on_open">Refresh articles on open</string>
     <string name="settings_refresh_on_open_description">Refreshes all articles after opening the
         application
