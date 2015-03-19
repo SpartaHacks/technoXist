@@ -31,7 +31,6 @@ import com.technoxist.Constants;
 import com.technoxist.R;
 import com.technoxist.fragment.EntryFragment;
 import com.technoxist.utils.PrefUtils;
-import com.technoxist.utils.UiUtils;
 
 public class EntryActivity extends BaseActivity {
 
@@ -39,7 +38,6 @@ public class EntryActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false))
         	setImmersiveFullScreen(true);

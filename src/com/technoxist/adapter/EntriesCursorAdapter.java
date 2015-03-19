@@ -67,7 +67,6 @@ import com.technoxist.R;
 import com.technoxist.provider.FeedData;
 import com.technoxist.provider.FeedData.EntryColumns;
 import com.technoxist.provider.FeedData.FeedColumns;
-import com.technoxist.utils.PrefUtils;
 import com.technoxist.utils.StringUtils;
 import com.technoxist.utils.UiUtils;
 
@@ -169,13 +168,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
         }
 
-        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
         TitleEnabled = Color.parseColor("#000000");
         DateEnabled = Color.parseColor("#606060");
-        } else {
-        TitleEnabled = Color.parseColor("#FFFFFF");
-        DateEnabled = Color.parseColor("#BBBBBB");
-        }
         
         if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {
             holder.titleTextView.setTextColor(TitleEnabled);

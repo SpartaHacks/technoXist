@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="light_entry_list_background">#eeeeee</color>
-    <color name="dark_entry_list_background">#000000</color>
     <color name="prefs_background">#ff202020</color>
     <color name="light_theme_color_primary">#2b8bf0</color>
     <color name="light_theme_color_primary_dark">#3367d6</color>
     <color name="light_accent">#3b77db</color>
-    <color name="dark_accent">#12405c</color>
-    <color name="dark_theme_color_primary">#175073</color>
-    <color name="dark_theme_color_primary_dark">#ff10364e</color>
     <color name="drawer_select">#33999999</color>
 </resources>

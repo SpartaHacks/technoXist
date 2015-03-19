@@ -12,16 +12,6 @@
         <item name="colorAccent">@color/light_accent</item>
     </style>
 
-    <style name="Theme.Dark" parent="Theme.AppCompat">
-        <item name="windowActionBar">false</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="android:activatedBackgroundIndicator">@drawable/item_drawer_list_selector</item>
-        <!-- customize the color palette -->
-        <item name="colorPrimary">@color/dark_theme_color_primary</item>
-        <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
-        <item name="colorAccent">@color/dark_accent</item>
-    </style>
-
     <style name="ActionBarThemeOverlay" parent="">
         <item name="android:textColorPrimary">#fff</item>
         <item name="colorControlNormal">#fff</item>

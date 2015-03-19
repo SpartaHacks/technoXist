@@ -37,7 +37,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +45,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.technoxist.Constants;
-import com.technoxist.MainApplication;
 import com.technoxist.R;
 import com.technoxist.adapter.DrawerAdapter;
 import com.technoxist.fragment.EntriesListFragment;
@@ -93,14 +91,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
-            getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
-        } else {
-            getWindow().setBackgroundDrawableResource(R.color.dark_entry_list_background);
-        }
+        getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
         setContentView(R.layout.activity_home);
 
         mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.entries_list_fragment);

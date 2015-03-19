@@ -51,13 +51,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.technoxist.R;
-import com.technoxist.utils.UiUtils;
 
 public class GeneralPrefsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_preferences);

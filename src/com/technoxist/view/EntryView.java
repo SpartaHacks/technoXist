@@ -77,14 +77,14 @@ public class EntryView extends WebView {
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
 
-    private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#f6f6f6" : "#202020";
-    private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#fff";
-    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#01c7ff" : "#313131";
-    private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#666666" : "#8c8c8c";
-    private static final String SUBTBORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "solid #ddd" : "solid #404040";
+    private static final String BACKGROUND_COLOR = "#f6f6f6";
+    private static final String TEXT_COLOR = "#000000";
+    private static final String BUTTON_COLOR = "#2b8bf0";
+    private static final String SUBTITLE_COLOR = "#666666";
+    private static final String SUBTBORDER_COLOR = "solid #ddd";
 
     private static final String CSS = "<head><style type='text/css'> "
-    		+ "body {max-width: 100%; margin: 1.2em 0.3cm 0.3cm 0.2cm; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%; font-weight: 800} "
+            + "body {max-width: 100%; margin: 1.2em 0.3cm 0.3cm 0.2cm; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%; font-weight:800} "
             + "* {max-width: 100%; word-break: break-word}"
             + "h1, h2 {font-weight: normal; line-height: 130%} "
             + "h1 {font-size: 170%; margin-bottom: 0.1em} "
@@ -92,18 +92,19 @@ public class EntryView extends WebView {
             + "a {color: #0099CC}"
             + "h1 a {color: inherit; text-decoration: none}"
             + "img {height: auto} "
-            + "iframe {height: 250px}"
             + "pre {white-space: pre-wrap;} "
             + "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
-            + "p {margin: 0.8em 0 0.8em 0; text-align: justify} "            + "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTBORDER_COLOR + "; border-bottom:1px " + SUBTBORDER_COLOR + "; padding-top:2px; padding-bottom:2px } "
+            + "p {margin: 0.8em 0 0.8em 0; text-align: justify} "
+            + "input[type=button], .buttons {font-weight:800} "
+            + ".buttons {margin: 0.8em 0 0.8em 0; text-align: center} "
+            + "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTBORDER_COLOR + "; border-bottom:1px " + SUBTBORDER_COLOR + "; padding-top:2px; padding-bottom:2px; font-weight:800 } "
             + "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} "
             + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
             + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
-            + ".button-section {margin: 0.1cm 0 0.2cm 0; text-align: none !important}"
-            + ".button-section b.marginfix {margin: 0.5cm 0 0.5cm 0; text-align: none !important}"
-            + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; background-color: " + BUTTON_COLOR + "; color: #FFFFFF; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
+            + ".button-section p {margin: 0.1cm 0 0.2cm 0}"
+            + ".button-section p.marginfix {margin: 0.5cm 0 0.5cm 0}"
+            + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; color: #FFFFFF; background-color: " + BUTTON_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
             + "</style><meta name='viewport' content='width=device-width'/></head>";
-
     private static final String BODY_START = "<body>";
     private static final String BODY_END = "</body>";
     private static final String TITLE_START = "<h1><a href='";
@@ -113,11 +114,11 @@ public class EntryView extends WebView {
     private static final String SUBTITLE_END = "</p>";
     private static final String BUTTON_SECTION_START = "<div class='button-section'>";
     private static final String BUTTON_SECTION_END = "</div>";
-    private static final String BUTTON_START = "<input type='button' value='";
+    private static final String BUTTON_START = "<p class='buttons'><input type='button' value='";
     private static final String BUTTON_MIDDLE = "' onclick='";
-    private static final String BUTTON_END = "'/><br><br>";
+    private static final String BUTTON_END = "'/></p>";
     // the separate 'marginfix' selector in the following is only needed because the CSS box model treats <input> and <a> elements differently
-    private static final String LINK_BUTTON_START = "<b class='marginfix'><a href='";
+    private static final String LINK_BUTTON_START = "<p class='marginfix buttons'><a href='";
     private static final String LINK_BUTTON_MIDDLE = "'>";
     private static final String LINK_BUTTON_END = "</a></p>";
     private static final String IMAGE_ENCLOSURE = "[@]image/";
@@ -172,10 +173,10 @@ public class EntryView extends WebView {
         // }
 
         // do not put 'null' to the base url...
-    	loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
+    	loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8, null);
     }
 
-    private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
+    private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp) {
         StringBuilder content = new StringBuilder(CSS).append(BODY_START);
 
         if (link == null) {

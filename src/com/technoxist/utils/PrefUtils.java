@@ -42,7 +42,6 @@ public class PrefUtils {
     public static final String NOTIFICATIONS_RINGTONE = "notifications.ringtone";
     public static final String NOTIFICATIONS_VIBRATE = "notifications.vibrate";
 
-    public static final String LIGHT_THEME = "lighttheme";
     public static final String DISPLAY_IMAGES = "display_images";
     public static final String PRELOAD_IMAGE_MODE = "preload_image_mode";
     public static final String DISPLAY_OLDEST_FIRST = "display_oldest_first";
