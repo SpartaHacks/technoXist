@@ -1,8 +1,6 @@
 technoXist
 
- Copyright (c) 2014 Suyash Bhatt 
-
-Copyright (c) 2012-2013 Frederic Julian
+Copyright (c) 2014-2015 Suyash Bhatt 
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,11 +16,11 @@ Copyright (c) 2012-2013 Frederic Julian
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	
-Some parts of this software are based on "Sparse rss" under the MIT license (see
+Parts of this software are based on "FeedEx" under the GNU license (see
 below). Please refers to the original project to identify which parts are under the
-MIT license.
+GNU license.
 
-Copyright (c) 2010-2012 Stefan Handschuh
+Copyright (c) 2012-2013 Frederic Julian
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
