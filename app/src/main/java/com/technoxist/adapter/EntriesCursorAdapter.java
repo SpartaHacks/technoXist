@@ -107,7 +107,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         final long id = cursor.getLong(mIdPos);
         final boolean favorite = !mNotFavoriteEntries.contains(id) && (cursor.getInt(mFavoritePos) == 1 || mFavoriteEntries.contains(id));
 
-        holder.starImgView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
+        holder.starImgView.setImageResource(favorite ? R.drawable.ic_drawer_bookmarks : R.drawable.ic_bookmark_outline);
         holder.starImgView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
         holder.starImgView.setOnClickListener(new OnClickListener() {
             @Override
@@ -116,12 +116,12 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                 if (newFavorite) {
                     view.setTag(Constants.TRUE);
-                    holder.starImgView.setImageResource(R.drawable.dimmed_rating_important);
+                    holder.starImgView.setImageResource(R.drawable.ic_drawer_bookmarks);
                     mFavoriteEntries.add(id);
                     mNotFavoriteEntries.remove(id);
                 } else {
                     view.setTag(Constants.FALSE);
-                    holder.starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
+                    holder.starImgView.setImageResource(R.drawable.ic_bookmark_outline);
                     mNotFavoriteEntries.add(id);
                     mFavoriteEntries.remove(id);
                 }
