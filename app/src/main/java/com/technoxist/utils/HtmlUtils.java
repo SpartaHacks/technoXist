@@ -120,6 +120,9 @@ public class HtmlUtils {
                 if (isCorrectImage(imgUrl)) {
                     return imgUrl;
                 }
+                else {
+                    return null;
+                }
             }
         }
 
@@ -130,6 +133,9 @@ public class HtmlUtils {
         for (String imgUrl : imgUrls) {
             if (isCorrectImage(imgUrl)) {
                 return imgUrl;
+            }
+            else {
+                return null;
             }
         }
 
