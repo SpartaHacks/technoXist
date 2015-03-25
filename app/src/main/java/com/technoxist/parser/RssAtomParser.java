@@ -346,15 +346,26 @@ public class RssAtomParser extends DefaultHandler {
                 values.put(EntryColumns.TITLE, improvedTitle);
 
                 String improvedContent = null;
+                String mainImageUrl = null;
                 if (description != null) {
                     // Improve the description
                     improvedContent = HtmlUtils.improveHtmlContent(description.toString(), feedBaseUrl);
                     if (fetchImages) {
-                        entriesImages.add(HtmlUtils.getImageURLs(improvedContent));
+                        ArrayList<String> urls = HtmlUtils.getImageURLs(improvedContent);
+                        if (!urls.isEmpty()) {
+                            entriesImages.add(urls);
+                            mainImageUrl = HtmlUtils.getMainImageURL(urls);
+                        }
+                    } else {
+                        mainImageUrl = HtmlUtils.getMainImageURL(improvedContent);
                     }
                     if (improvedContent != null) {
                         values.put(EntryColumns.ABSTRACT, improvedContent);
                     }
+                }
+
+                if (mainImageUrl != null) {
+                    values.put(EntryColumns.IMAGE_URL, mainImageUrl);
                 }
 
                 // Try to find if the entry is not filtered and need to be processed

@@ -26,6 +26,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
@@ -43,6 +46,8 @@ import com.technoxist.provider.FeedData.FeedColumns;
 import com.technoxist.utils.StringUtils;
 import com.technoxist.utils.UiUtils;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.Vector;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
@@ -51,9 +56,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public TextView titleTextView;
         public TextView dateTextView;
         public ImageView starImgView;
+        public ImageView mainImgView;
     }
 
-    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos, TitleEnabled, DateEnabled;
+    private int mTitlePos, mMainImgPos,mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos, TitleEnabled, DateEnabled;
     private int Disabled = Color.parseColor("#8A8A8A");
 
     private final Uri mUri;
@@ -79,11 +85,22 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
             holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
             holder.starImgView = (ImageView) view.findViewById(android.R.id.icon);
+            holder.mainImgView = (ImageView) view.findViewById(R.id.main_icon);
             
             view.setTag(holder);
         }
 
         final ViewHolder holder = (ViewHolder) view.getTag();
+
+        String mainImgUrl = cursor.getString(mMainImgPos);
+        if (mainImgUrl != null) {
+            holder.mainImgView.setVisibility(View.VISIBLE);
+            Picasso.with(context).load(mainImgUrl).fit().centerCrop().into(holder.mainImgView);
+        } else {
+            Picasso.with(context).cancelRequest(holder.mainImgView);
+            holder.mainImgView.setImageDrawable(null);
+            holder.mainImgView.setVisibility(View.GONE);
+            }
 
         holder.titleTextView.setText(cursor.getString(mTitlePos));
 
@@ -143,13 +160,22 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         TitleEnabled = Color.parseColor("#000000");
         DateEnabled = Color.parseColor("#606060");
+        ColorMatrix colorMatrix_Sat0 = new ColorMatrix();
+        colorMatrix_Sat0.setSaturation(0);
+        ColorMatrix colorMatrix_Sat100 = new ColorMatrix();
+        colorMatrix_Sat100.setSaturation(1);
+        ColorFilter color_grayscale = new ColorMatrixColorFilter(colorMatrix_Sat0);
+        ColorFilter color_normal = new ColorMatrixColorFilter(colorMatrix_Sat100);
         
         if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {
             holder.titleTextView.setTextColor(TitleEnabled);
             holder.dateTextView.setTextColor(DateEnabled);
+            holder.mainImgView.setColorFilter(color_normal);
+
         } else {
             holder.titleTextView.setTextColor(Disabled);
             holder.dateTextView.setTextColor(Disabled);
+            holder.mainImgView.setColorFilter(color_grayscale);
         }
     }
 
@@ -227,6 +253,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if (cursor != null && cursor.getCount() > 0) {
             mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+            mMainImgPos = cursor.getColumnIndex(EntryColumns.IMAGE_URL);
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
