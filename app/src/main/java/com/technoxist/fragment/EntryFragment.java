@@ -59,6 +59,7 @@ import com.technoxist.provider.FeedData;
 import com.technoxist.provider.FeedData.EntryColumns;
 import com.technoxist.provider.FeedData.FeedColumns;
 import com.technoxist.service.FetcherService;
+import com.technoxist.utils.DepthPageTransformer;
 import com.technoxist.utils.PrefUtils;
 import com.technoxist.utils.UiUtils;
 import com.technoxist.view.EntryView;
@@ -211,7 +212,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         });
 
         mEntryPager = (ViewPager) rootView.findViewById(R.id.pager);
-        //mEntryPager.setPageTransformer(true, new DepthPageTransformer());
+        mEntryPager.setPageTransformer(true, new DepthPageTransformer());
         mEntryPager.setAdapter(mEntryPagerAdapter);
 
         if (savedInstanceState != null) {
