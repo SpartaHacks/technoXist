@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -32,7 +31,7 @@ public class BaseActivity extends ActionBarActivity {
 
 	private static final String STATE_IS_NORMAL_FULLSCREEN = "STATE_IS_NORMAL_FULLSCREEN";
 	private static final String STATE_IS_IMMERSIVE_FULLSCREEN = "STATE_IS_IMMERSIVE_FULLSCREEN";
-	private boolean mIsNormalFullScreen, mIsImmersiveFullScreen, mIsVideoFullscreen;
+	private boolean mIsNormalFullScreen, mIsImmersiveFullScreen;
 	private View mDecorView;
 
 
@@ -110,17 +109,9 @@ public class BaseActivity extends ActionBarActivity {
     	return mIsNormalFullScreen || mIsImmersiveFullScreen;
     	}
     	
-    	public boolean isNormalFullScreen() {
-    	return mIsNormalFullScreen;
-    	}
-    	
-    	public void setNormalFullScreen(boolean fullScreen) {
+    public void setNormalFullScreen(boolean fullScreen) {
     	setNormalFullScreen(fullScreen, false);
     	}
-    	
-    	public boolean isImmersiveFullScreen() {
-    	return mIsImmersiveFullScreen;
-    }
 
     @SuppressLint("InlinedApi")
     public void setImmersiveFullScreen(boolean fullScreen) {
@@ -148,7 +139,6 @@ public class BaseActivity extends ActionBarActivity {
     public void setVideoFullScreen(boolean fullScreen) {
 
         if (fullScreen) {
-            mIsVideoFullscreen = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 getSupportActionBar().hide();
                 mDecorView.setSystemUiVisibility(
@@ -164,7 +154,6 @@ public class BaseActivity extends ActionBarActivity {
             }
         }
         else {
-            mIsVideoFullscreen = false;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 getSupportActionBar().show();
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);

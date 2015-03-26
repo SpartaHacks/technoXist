@@ -72,7 +72,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private Uri mUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
-    private ListView mListView;
     private SearchView mSearchView;
     private long mListDisplayDate = new Date().getTime();
     private int mNewEntriesNumber, mOldUnreadEntriesNumber = -1;
@@ -199,7 +198,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             setListAdapter(mEntriesCursorAdapter);
         }
 
-        mListView = (ListView) rootView.findViewById(android.R.id.list);
+        ListView mListView = (ListView) rootView.findViewById(android.R.id.list);
         mListView.setFastScrollEnabled(false);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
         mListView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up_right));

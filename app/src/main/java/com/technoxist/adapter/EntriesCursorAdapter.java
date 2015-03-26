@@ -59,7 +59,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public ImageView mainImgView;
     }
 
-    private int mTitlePos, mMainImgPos,mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos, TitleEnabled, DateEnabled;
+    private int mTitlePos, mMainImgPos,mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
     private int Disabled = Color.parseColor("#8A8A8A");
 
     private final Uri mUri;
@@ -158,8 +158,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
         }
 
-        TitleEnabled = Color.parseColor("#000000");
-        DateEnabled = Color.parseColor("#606060");
+        int TitleEnabled = Color.parseColor("#000000");
+        int DateEnabled = Color.parseColor("#606060");
         ColorMatrix colorMatrix_Sat0 = new ColorMatrix();
         colorMatrix_Sat0.setSaturation(0);
         ColorMatrix colorMatrix_Sat100 = new ColorMatrix();

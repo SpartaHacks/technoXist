@@ -34,8 +34,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -61,7 +59,6 @@ import com.technoxist.provider.FeedData.FeedColumns;
 import com.technoxist.service.FetcherService;
 import com.technoxist.utils.DepthPageTransformer;
 import com.technoxist.utils.PrefUtils;
-import com.technoxist.utils.UiUtils;
 import com.technoxist.view.EntryView;
 
 public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
@@ -71,7 +68,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
     private static final String STATE_INITIAL_ENTRY_ID = "STATE_INITIAL_ENTRY_ID";
 
-    private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos;
+    private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos;
 
     private int mCurrentPagerPos = -1;
     private Uri mBaseUri;
@@ -561,7 +558,6 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                 mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
                 mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
                 mFeedUrlPos = cursor.getColumnIndex(FeedColumns.URL);
-                mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
             }
 
             int position = loader.getId();
