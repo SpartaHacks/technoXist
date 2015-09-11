@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Light" parent="Theme.AppCompat.Light">
+    <style name="Theme.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:activatedBackgroundIndicator">@drawable/item_drawer_list_selector</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="actionModeBackground">@color/light_theme_color_primary</item>
+        <item name="android:actionModeStyle">@style/ActionBarThemeOverlay</item>
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/light_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
     </style>
 
-    <style name="ActionBarThemeOverlay" parent="">
+    <style name="ActionBarThemeOverlay" parent="Widget.AppCompat.ActionMode">
         <item name="android:textColorPrimary">#fff</item>
         <item name="colorControlNormal">#fff</item>
-        <item name="android:actionModeBackground">@color/light_theme_color_primary</item>
     </style>
 </resources>
