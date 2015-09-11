@@ -46,7 +46,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Switch;
+import android.support.v7.widget.SwitchCompat;
 import android.widget.Toast;
 
 import com.technoxist.Constants;
@@ -264,7 +264,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         inflater.inflate(R.menu.entry_list, menu);
         MenuItem switchItem = menu.findItem(R.id.switchRead);
         View switchView = MenuItemCompat.getActionView(switchItem);
-        Switch mswitch = (Switch) switchView.findViewById(R.id.switch_unread);
+        SwitchCompat mswitch = (SwitchCompat) switchView.findViewById(R.id.switch_unread);
+        mswitch.setThumbResource(R.drawable.switch_thumb);
+        mswitch.setTrackResource(R.drawable.switch_track);
         if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
             mswitch.setChecked(true);
         } else {
