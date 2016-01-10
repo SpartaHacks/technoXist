@@ -109,29 +109,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.REAL_LAST_UPDATE + ' ' + FeedData.TYPE_DATE_TIME);
-        }
-        if (oldVersion < 3) {
-            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.RETRIEVE_FULLTEXT + ' ' + FeedData.TYPE_BOOLEAN);
-        }
-        if (oldVersion < 4) {
-            executeCatchedSQL(database, createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
-            // Remove old FeedEx directory (now useless)
-            try {
-                deleteFileOrDir(new File(Environment.getExternalStorageDirectory() + "/FeedEx/"));
-            } catch (Exception ignored) {
-            }
-        }
-        if (oldVersion < 5) {
-            executeCatchedSQL(database, ALTER_TABLE + TaskColumns.TABLE_NAME + ADD + "UNIQUE(" + TaskColumns.ENTRY_ID + ", " + TaskColumns.IMG_URL_TO_DL + ") ON CONFLICT IGNORE");
-        }
-        if (oldVersion < 6) {
-            executeCatchedSQL(database, ALTER_TABLE + FilterColumns.TABLE_NAME + ADD + FilterColumns.IS_ACCEPT_RULE + ' ' + FeedData.TYPE_BOOLEAN);
-        }
-        if (oldVersion < 7) {
-            executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.FETCH_DATE + ' ' + FeedData.TYPE_DATE_TIME);
-        }
         if (oldVersion < 8) {
             executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.IMAGE_URL + ' ' + FeedData.TYPE_TEXT);
         }
@@ -144,11 +121,4 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void deleteFileOrDir(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory())
-            for (File child : fileOrDirectory.listFiles())
-                deleteFileOrDir(child);
-
-        fileOrDirectory.delete();
-    }
 }
