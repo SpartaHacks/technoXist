@@ -33,6 +33,7 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -521,13 +522,16 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     public void onStartVideoFullScreen() {
         BaseActivity activity = (BaseActivity) getActivity();
         activity.setVideoFullScreen(true);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override
     public void onEndVideoFullScreen() {
         BaseActivity activity = (BaseActivity) getActivity();
         activity.setVideoFullScreen(false);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
+
     @Override
     public FrameLayout getVideoLayout() {
         View layout = getView();

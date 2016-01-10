@@ -98,8 +98,9 @@ public class EntryView extends WebView {
 
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
     private EntryViewManager mEntryViewMgr;
+
+    //For Fullscreen Video view
     public View mCustomView;
-    public VideoWebView mVideoView;
     private FrameLayout videoLayout;
 
     public EntryView(Context context) {
@@ -136,7 +137,10 @@ public class EntryView extends WebView {
             contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
             getSettings().setBlockNetworkImage(true);
         }
-    	
+
+        // Iframe videos to get fullscreen
+        contentText = contentText.replace("frameborder=\"0\"", "frameborder=\"0\" allowfullscreen");
+        contentText = contentText.replace("?rel=0&amp;autoplay=0&amp;wmode=opaque&amp;controls=2&amp;autohide=1&amp;showinfo=0", "");
 
         // String baseUrl = "";
         // try {
@@ -203,38 +207,15 @@ public class EntryView extends WebView {
         addJavascriptInterface(mInjectedJSObject, mInjectedJSObject.toString());
 
         // For HTML5 Video
-        mVideoView = new VideoWebView();
-        setWebChromeClient(mVideoView);
+        setWebChromeClient(new VideoWebView());
 
-        setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Context context = getContext();
-                try {
-                	if (url.startsWith(Constants.FILE_SCHEME)) {
-                        File file = new File(url.replace(Constants.FILE_SCHEME, ""));
-                        File extTmpFile = new File(context.getExternalCacheDir(), "tmp_img.jpg");
-                        FileUtils.copy(file, extTmpFile);
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(extTmpFile), "image/jpeg");
-                        context.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        context.startActivity(intent);
-                    }
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(context, R.string.cant_open_link, Toast.LENGTH_SHORT).show();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                	                  }
-                return true;
-            }
-        });
+
+        setWebViewClient(new MyWebViewClient());
+
     }
     // For HTML5 video
     public class VideoWebView extends WebChromeClient {
-        private WebChromeClient.CustomViewCallback mCustomViewCallback;
+        private CustomViewCallback mCustomViewCallback;
 
         @Override
         public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
@@ -274,6 +255,31 @@ public class EntryView extends WebView {
             videoLayout.setVisibility(View.GONE);
             mCustomViewCallback.onCustomViewHidden();
             mEntryViewMgr.onEndVideoFullScreen();
+        }
+    }
+    private class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Context context = getContext();
+            try {
+                if (url.startsWith(Constants.FILE_SCHEME)) {
+                    File file = new File(url.replace(Constants.FILE_SCHEME, ""));
+                    File extTmpFile = new File(context.getExternalCacheDir(), "tmp_img.jpg");
+                    FileUtils.copy(file, extTmpFile);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(extTmpFile), "image/jpeg");
+                    context.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    context.startActivity(intent);
+                }
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, R.string.cant_open_link, Toast.LENGTH_SHORT).show();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
         }
     }
 
