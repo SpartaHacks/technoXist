@@ -49,7 +49,6 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_UNREAD = 8;
 
     private static final int ITEM_PADDING = UiUtils.dpToPixel(20);
-    private static final int NORMAL_TEXT_COLOR = Color.parseColor("#000000");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
     private static final int CACHE_MAX_ENTRIES = 100;
@@ -104,7 +103,6 @@ public class DrawerAdapter extends BaseAdapter {
         // default init
         holder.iconView.setImageDrawable(null);
         holder.titleTxt.setText("");
-        holder.titleTxt.setTextColor(NORMAL_TEXT_COLOR);
         holder.titleTxt.setAllCaps(false);
         holder.unreadTxt.setText("");
         convertView.setPadding(0, 0, 0, 0);

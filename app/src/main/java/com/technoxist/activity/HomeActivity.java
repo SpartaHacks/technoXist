@@ -197,7 +197,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         // If the nav drawer is open, hide action items related to the content view
         boolean isOpened = mDrawerLayout.isDrawerOpen(mLeftDrawer);
         if(isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
-            menu.findItem(R.id.menu_all_read).setVisible(false);
+            // Do something when drawer is open
         }
         return super.onPrepareOptionsMenu(menu);
     }
