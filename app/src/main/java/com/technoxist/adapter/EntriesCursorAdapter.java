@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.technoxist.Constants;
 import com.technoxist.MainApplication;
 import com.technoxist.R;
@@ -46,7 +47,7 @@ import com.technoxist.provider.FeedData.FeedColumns;
 import com.technoxist.utils.StringUtils;
 import com.technoxist.utils.UiUtils;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.Vector;
 
@@ -95,9 +96,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         String mainImgUrl = cursor.getString(mMainImgPos);
         if (mainImgUrl != null) {
             holder.mainImgView.setVisibility(View.VISIBLE);
-            Picasso.with(context).load(mainImgUrl).fit().centerCrop().into(holder.mainImgView);
+            Glide.with(context).load(mainImgUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(holder.mainImgView);
         } else {
-            Picasso.with(context).cancelRequest(holder.mainImgView);
             holder.mainImgView.setImageDrawable(null);
             holder.mainImgView.setVisibility(View.GONE);
             }
