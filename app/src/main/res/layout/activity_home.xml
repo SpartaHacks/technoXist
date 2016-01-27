@@ -1,6 +1,6 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +9,8 @@
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,18 +28,21 @@
                 tools:layout="@layout/item_drawer_list" />
 
         </LinearLayout>
-
-        <LinearLayout
+        <android.support.design.widget.NavigationView
             android:id="@+id/left_drawer"
             android:layout_width="290dp"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:fitsSystemWindows="true" >
+        <LinearLayout
+            android:layout_width="290dp"
+            android:layout_height="match_parent"
             android:background="@android:color/white"
             android:orientation="vertical">
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="140dp"
                 android:background="@color/light_theme_color_primary">
 
                 <ImageView
@@ -70,6 +74,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="48.0dip"
+                android:id="@+id/settings"
                 android:text="Settings"
                 android:textSize="16.0sp"
                 android:ellipsize="end"
@@ -83,6 +88,22 @@
                 android:gravity="center_vertical"
                 android:layout_alignBottom="@+id/drawer_list"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48.0dip"
+                android:text="About"
+                android:textSize="16.0sp"
+                android:ellipsize="end"
+                android:textColor="@drawable/drawer_text_selected"
+                android:drawableLeft="@drawable/ic_info_grey"
+                android:drawablePadding="36dp"
+                android:paddingLeft="18dp"
+                android:onClick="onClickAbout"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:layout_alignBottom="@+id/settings"/>
+
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
@@ -90,6 +111,7 @@
                 android:background="@android:color/transparent" />
 
         </LinearLayout>
+        </android.support.design.widget.NavigationView>
 
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

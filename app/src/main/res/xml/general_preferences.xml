@@ -3,16 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <PreferenceScreen
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/about_technoxist">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.technoxist"
-            android:targetClass="com.technoxist.activity.AboutActivity"/>
-    </PreferenceScreen>
-
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

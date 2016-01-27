@@ -255,6 +255,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         startActivity(new Intent(this, GeneralPrefsActivity.class));
     }
 
+    public void onClickAbout(View view) {
+        startActivity(new Intent(this, AboutActivity.class));
+    }
+
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mDrawerAdapter.setCursor(null);

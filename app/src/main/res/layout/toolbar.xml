@@ -5,7 +5,7 @@
     android:id="@+id/app_bar"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:theme="@style/ActionBarThemeOverlay">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
