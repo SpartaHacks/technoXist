@@ -1,4 +1,4 @@
-#technoXist Reader
+#News Reader
 Opensource Android app for those who need to make Android app for their website. Light and modern Android app which parses rss feeds and store news/post/articles to database for offline browsing in android WbeView.
 
 #Screenshots
