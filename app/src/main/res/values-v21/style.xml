@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.Light" parent="Theme.Light.Base">
+    <style name="Theme.Light.Translucent" parent="Theme.Light.Base">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
