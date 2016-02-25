@@ -19,7 +19,8 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/round_background"
         android:src="@drawable/ic_fullscreen_exit_white"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_gravity="right|bottom"/>
     <FrameLayout
         android:id="@+id/videoLayout"
         android:layout_width="match_parent"
