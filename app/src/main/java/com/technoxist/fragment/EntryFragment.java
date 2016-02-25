@@ -275,7 +275,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         super.onResume();
         mEntryPagerAdapter.onResume();
 
-        if (((BaseActivity) getActivity()).isFullScreen()) {
+        if (((BaseActivity) getActivity()).isNormalFullScreen()) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         } else {
             mCancelFullscreenBtn.setVisibility(View.GONE);

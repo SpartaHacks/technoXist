@@ -104,8 +104,8 @@ public class BaseActivity extends AppCompatActivity {
         mOnFullScreenListener = listener;
     }
 
-    public boolean isFullScreen() {
-    	return mIsNormalFullScreen || mIsImmersiveFullScreen;
+    public boolean isNormalFullScreen() {
+    	return mIsNormalFullScreen;
     	}
     	
     public void setNormalFullScreen(boolean fullScreen) {
@@ -116,10 +116,15 @@ public class BaseActivity extends AppCompatActivity {
     public void setImmersiveFullScreen(boolean fullScreen) {
     	if (fullScreen) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                getSupportActionBar().hide();
-                mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().hide();
+                }
+                mDecorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             }
             else {
             	setNormalFullScreen(true, true);
@@ -127,7 +132,9 @@ public class BaseActivity extends AppCompatActivity {
         } 
     	else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                getSupportActionBar().show();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().show();
+                }
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             } 
             else {
@@ -166,7 +173,9 @@ public class BaseActivity extends AppCompatActivity {
                     if (fullScreen) {
                         mIsNormalFullScreen = true;
 
-                        getSupportActionBar().hide();
+                        if (getSupportActionBar() != null) {
+                            getSupportActionBar().hide();
+                        }
                         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
@@ -176,7 +185,9 @@ public class BaseActivity extends AppCompatActivity {
                     } else {
                         mIsNormalFullScreen = false;
 
-                        getSupportActionBar().show();
+                        if (getSupportActionBar() != null) {
+                            getSupportActionBar().show();
+                        }
                         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

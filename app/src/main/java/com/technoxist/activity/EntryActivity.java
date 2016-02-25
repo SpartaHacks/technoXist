@@ -37,8 +37,6 @@ public class EntryActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false))
-        	setImmersiveFullScreen(true);
         
         setContentView(R.layout.activity_entry);
 
@@ -49,6 +47,8 @@ public class EntryActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false))
+            setImmersiveFullScreen(true);
     }
 
     @Override
